@@ -5,7 +5,6 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
     Stack,
     Link,
     Button,
@@ -14,9 +13,11 @@ import {
     Image
 } from '@chakra-ui/react';
 import logo from '../../assets/logo-dark.svg';
-import authcover from "../css/authcover.module.css";
+import authcover from '../css/authcover.module.css';
+import coverRight from '../../assets/cover-right.png';
+import coverLeft from '../../assets/cover-left.png';
 
-export default function LoginPage() {
+export default function RegisterPage() {
     return (
         <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'gray.50'}>
             <Flex flex={[0, 0, 0, 1]}>
@@ -30,13 +31,17 @@ export default function LoginPage() {
                         <Image w={"40%"} src={logo} alt={'logo'} />
                     </Box>
                     <Stack align={'center'}>
-                        <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+                        <Heading fontSize={'4xl'}>Create a new account</Heading>
                         <Text fontSize={'lg'} color={'gray.600'}>
                             Shop more than 500,000+ books ️
                         </Text>
                     </Stack>
                     <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
                         <Stack spacing={4}>
+                            <FormControl id="username">
+                                <FormLabel>Username</FormLabel>
+                                <Input type="text" />
+                            </FormControl>
                             <FormControl id="email">
                                 <FormLabel>Email address</FormLabel>
                                 <Input type="email" />
@@ -45,26 +50,21 @@ export default function LoginPage() {
                                 <FormLabel>Password</FormLabel>
                                 <Input type="password" />
                             </FormControl>
-                            <Stack spacing={10}>
-                                <Stack
-                                    direction={{ base: 'column', sm: 'row' }}
-                                    align={'start'}
-                                    justify={'space-between'}>
-                                    <Checkbox>Remember me</Checkbox>
-                                    <Link color={'blue.400'}>Forgot password?</Link>
-                                </Stack>
-                                <Button
-                                    colorScheme={'facebook'}
-                                    _hover={{
-                                        bg: 'blue.500',
-                                    }}>
-                                    Sign in
-                                </Button>
-                            </Stack>
+                            <FormControl id="confirm-password">
+                                <FormLabel>Confirm Password</FormLabel>
+                                <Input type="password" />
+                            </FormControl>
+                            <Button
+                                colorScheme={'facebook'}
+                                _hover={{
+                                    bg: 'blue.500',
+                                }}>
+                                Sign Up
+                            </Button>
                         </Stack>
                     </Box>
                     <Text align={'center'} fontSize={'lg'} color={'gray.600'}>
-                        Don't have an account? <Link color={'blue.400'}>Create account</Link>
+                        Already have an account? <Link color={'blue.400'}>Login</Link>
                     </Text>
                 </Stack>
             </Flex>
