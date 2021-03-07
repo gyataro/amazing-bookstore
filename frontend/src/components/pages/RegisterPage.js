@@ -6,16 +6,16 @@ import {
     FormLabel,
     Input,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
     Image
 } from '@chakra-ui/react';
+import {
+    Link
+} from 'react-router-dom';
 import logo from '../../assets/logo-dark.svg';
 import authcover from '../css/authcover.module.css';
-import coverRight from '../../assets/cover-right.png';
-import coverLeft from '../../assets/cover-left.png';
 
 export default function RegisterPage() {
     return (
@@ -64,7 +64,7 @@ export default function RegisterPage() {
                         </Stack>
                     </Box>
                     <Text align={'center'} fontSize={'lg'} color={'gray.600'}>
-                        Already have an account? <Link color={'blue.400'}>Login</Link>
+                        Already have an account? <Link to={'/login'} style={{ color: '#00B5D8' }}>Login</Link>
                     </Text>
                 </Stack>
             </Flex>

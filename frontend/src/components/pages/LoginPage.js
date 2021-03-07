@@ -7,12 +7,14 @@ import {
     Input,
     Checkbox,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
     Image
 } from '@chakra-ui/react';
+import {
+    Link
+} from 'react-router-dom';
 import logo from '../../assets/logo-dark.svg';
 import authcover from "../css/authcover.module.css";
 
@@ -51,7 +53,10 @@ export default function LoginPage() {
                                     align={'start'}
                                     justify={'space-between'}>
                                     <Checkbox>Remember me</Checkbox>
-                                    <Link color={'blue.400'}>Forgot password?</Link>
+                                    <Text color={'#00B5D8'}>
+                                        <Link>Forgot password?</Link>
+                                    </Text>
+
                                 </Stack>
                                 <Button
                                     colorScheme={'facebook'}
@@ -64,7 +69,7 @@ export default function LoginPage() {
                         </Stack>
                     </Box>
                     <Text align={'center'} fontSize={'lg'} color={'gray.600'}>
-                        Don't have an account? <Link color={'blue.400'}>Create account</Link>
+                        Don't have an account? <Link to={'/register'} style={{ color: '#00B5D8' }}>Create account</Link>
                     </Text>
                 </Stack>
             </Flex>
