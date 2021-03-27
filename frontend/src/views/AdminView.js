@@ -11,12 +11,12 @@ import {
     TabPanel
 } from "@chakra-ui/react";
 
-import Header from "../sections/Header"
-import Footer from "../sections/Footer"
+import Header from "../components/general/Header"
+import Footer from "../components/general/Footer"
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaCashRegister, FaBoxes, FaUserCog, FaChartLine } from 'react-icons/fa'
 
-export default function AdminPage(props) {
+export default function AdminView(props) {
     return (
         <Flex
             display={"flex"}

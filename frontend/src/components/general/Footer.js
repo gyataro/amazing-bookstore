@@ -58,24 +58,48 @@ export default function Footer() {
                 spacing={4}
                 justify={{ base: 'center', md: 'space-between' }}
                 align={{ base: 'center', md: 'center' }}>
-                <Flex align="center">
-                    <Link to={'/'}>
-                        <Image w="80px" src={logo} />
-                    </Link>
-                </Flex>
-                <Text>© 2021 Amazing Bookstore. All rights reserved</Text>
-                <Stack direction={'row'} spacing={6}>
-                    <SocialButton label={'Twitter'} href={'#'}>
-                        <AiFillWechat />
-                    </SocialButton>
-                    <SocialButton label={'YouTube'} href={'#'}>
-                        <FaYoutube />
-                    </SocialButton>
-                    <SocialButton label={'Instagram'} href={'#'}>
-                        <FaInstagram />
-                    </SocialButton>
-                </Stack>
+                <FooterLogo url={logo}/>
+                <FooterText />
+                <FooterSocial />
+
             </Container>
         </Box>
     );
+}
+
+function FooterLogo(props) {
+    return (
+        <Flex align="center">
+            <Link to={'/'}>
+                <Image w="80px" src={props.url} />
+            </Link>
+        </Flex>
+    );
+}
+
+function FooterText() {
+    return (
+        <Text>© {getYear()} Amazing Bookstore. All rights reserved</Text>
+    )
+}
+
+function FooterSocial() {
+    return (
+        <Stack direction={'row'} spacing={6}>
+            <SocialButton label={'Twitter'} href={'#'}>
+                <AiFillWechat />
+            </SocialButton>
+            <SocialButton label={'YouTube'} href={'#'}>
+                <FaYoutube />
+            </SocialButton>
+            <SocialButton label={'Instagram'} href={'#'}>
+                <FaInstagram />
+            </SocialButton>
+        </Stack>
+    );
+}
+
+function getYear() {
+    var currentDate = new Date();
+    return currentDate.getFullYear();
 }

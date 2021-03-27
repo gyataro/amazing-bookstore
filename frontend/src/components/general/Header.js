@@ -8,7 +8,7 @@ import {
 import {
     Link
 } from 'react-router-dom';
-import Search from "../sections/Search"
+import Search from "./Search"
 import logo from '../../assets/logo-light.svg';
 import { FaShoppingCart } from 'react-icons/fa';
 import { BsThreeDotsVertical, BsX } from 'react-icons/bs';
@@ -70,7 +70,7 @@ export default function Header(props) {
                     direction={["column", "row", "row", "row"]}
                     pt={[8, 8, 0, 0]}
                 >
-                    <MenuItems to="/user">
+                    <MenuItems to="/cart">
                         <Button
                             leftIcon={<FaShoppingCart />}
                             size="md"

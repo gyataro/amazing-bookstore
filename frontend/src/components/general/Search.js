@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import React from "react";
 import {
     FormControl,
@@ -11,6 +12,7 @@ import { ImSearch } from 'react-icons/im';
 
 export default function Search() {
     const { handleSubmit, register, formState } = useForm();
+    let history = useHistory();
 
     function validateName(value) {
         return true;
@@ -19,9 +21,9 @@ export default function Search() {
     function onSubmit(values) {
         return new Promise(resolve => {
             setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
+                history.push("/search?query=" + String(values.query));
                 resolve();
-            }, 3000);
+            }, 100);
         });
     }
 

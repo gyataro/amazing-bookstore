@@ -14,19 +14,7 @@
     z-index: -1;
 }
 
-.card_title {
-    overflow: hidden;
-    line-height: 1.2em;
-    height: 2.4em;
-}
-
 .card_title:hover {
     color: #FF9900;
     text-decoration: underline;
-}
-
-.card_price_decimal {
-    padding-left: 2px;
-    font-size: small;
-    vertical-align: super;
 }

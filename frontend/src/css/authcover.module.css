@@ -10,7 +10,7 @@ html, body { height: 100% }
     width: 100%;
     height: 100%;
     display: block;
-    background-image: url("../../assets/cover-right.png");
+    background-image: url("../assets/cover-right.jpg");
     background-repeat: no-repeat;
     background-position: left;
     background-size: cover;
@@ -20,7 +20,7 @@ html, body { height: 100% }
     width: 100%;
     height: 100%;
     display: block;
-    background-image: url("../../assets/cover-left.png");
+    background-image: url("../assets/cover-left.jpg");
     background-repeat: no-repeat;
     background-position: right;
     background-size: cover;
