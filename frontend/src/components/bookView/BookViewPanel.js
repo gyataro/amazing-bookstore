@@ -38,14 +38,15 @@ export default class BookViewPanel extends React.Component {
         if (localStorage.getItem('cart')) {
             cartItems = JSON.parse(localStorage.getItem('cart'));
         }
-        cartItems.push({'pid': this.state.bookId});
-        localStorage.setItem('cart', JSON.stringify(cartItems));
 
-        if (localStorage.hasOwnProperty('cart')) {
-            
+        let itemIndex = cartItems.findIndex(x => x.pid === this.state.bookId);
+        if (itemIndex === -1) {
+            cartItems.push({'pid': this.state.bookId, 'qty': 1});
         } else {
-
+            cartItems[itemIndex].qty += 1;
         }
+
+        localStorage.setItem('cart', JSON.stringify(cartItems));
     };
 
     addOrder() {
@@ -165,13 +166,6 @@ function BookViewCheckout(props) {
                 <Heading>
                     {props.currency}{props.price}
                 </Heading>
-                <NumberInput size="md" w={{ base: "100%", lg: "50%" }} defaultValue={1} min={1}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
                 <Button
                     w={{ base: "100%", lg: "100%" }}
                     bgColor="#FBD38D"

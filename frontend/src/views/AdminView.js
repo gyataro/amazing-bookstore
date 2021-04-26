@@ -10,11 +10,22 @@ import {
     TabPanels,
     TabPanel
 } from "@chakra-ui/react";
-
-import Header from "../components/general/Header"
-import Footer from "../components/general/Footer"
+import Header from "../components/general/Header";
+import Footer from "../components/general/Footer";
+import AdminBookPanel from "../components/adminView/AdminBookPanel";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { FaCashRegister, FaBoxes, FaUserCog, FaChartLine } from 'react-icons/fa'
+import { FaCashRegister, FaBoxes, FaUserCog, FaChartLine } from 'react-icons/fa';
+
+const headers = ["Book", "Author", "Language", "ISBN13", "Price", "Stock"];
+const data = [
+    ["The Lord of the Rings", "J. R. R. Tolkien", "English", "9781234567897", 19.99, 31],
+    ["Le Petit Prince (The Little Prince)", "Antoine de Saint-Exupéry", "French", "9787271334355", 5.99, 12],
+    ["Harry Potter and the Philosopher's Stone", "J. K. Rowling", "English", "9780383976352", 39.99, 23],
+    ["And Then There Were None", "Agatha Christie", "English", "9789447354198", 78.88, 48],
+    ["Dream of the Red Chamber", "Cao Xueqin", "Chinese", "9781359809483", 14.58, 7],
+    ["The Hobbit", "J. R. R. Tolkien", "English", "9785786308694", 78.99, 9],
+    ["She: A History of Adventure", "H. Rider Haggard", "English", "9782418102590", "38.88", 6]
+];
 
 export default function AdminView(props) {
     return (
@@ -62,10 +73,7 @@ export default function AdminView(props) {
                         <p>管理员可以查看系统中所有的订单，并且可以使用搜索功能来实现过滤，具体可以按照时间范围或书籍名称过滤</p>
                     </TabPanel>
                     <TabPanel>
-                        <p>管理员可以浏览数据库中已有的书籍，以列表形式显示，包括书名、作者、封面、ISBN 编号和库存量</p>
-                        <p>在列表上方提供搜索功能，管理员可以用书名来过滤想要查找的书籍</p>
-                        <p>管理员在列表中可以修改每本图书的上述各种属性，包括书名、作者、封面、ISBN 编号和库存量</p>
-                        <p>管理员可以删除旧图书，可以添加新图书</p>
+                        <AdminBookPanel headers={headers} initialData={data}/>
                     </TabPanel>
                     <TabPanel>
                         <p>管理员可以禁用/解禁用户，被禁用的用户将无法登录系统</p>
