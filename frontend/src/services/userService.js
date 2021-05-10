@@ -1,10 +1,16 @@
+import axios from "axios";
 
-export function login(data) {
+/*export function login(data) {
     alert(JSON.stringify(data, null, 2));
+    axios.post("http://localhost:8080/api/auth/signin", data)
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+        })
 };
 
 export function register(data) {
-    alert(JSON.stringify(data, null, 2));
+    //alert(JSON.stringify(data, null, 2));
 };
 
 export function checkSession(callback) {
@@ -18,4 +24,4 @@ const checkAuth = (data) => {
     } else {
         this.setState({ isAuthed: false, hasAuthed: false });
     }
-}
+}*/

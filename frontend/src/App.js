@@ -1,9 +1,9 @@
 import './App.css';
-import Router from './router/Router.js';
+import PublicRoute from './router/PublicRoute.js';
 
 function App() {
     return (
-        <Router />
+        <PublicRoute />
     );
 }
 
