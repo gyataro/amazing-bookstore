@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
 import Placeholder from "../../assets/placeholder.svg";
+import { bookService } from "../../services/bookService";
 
 export default class BookViewPanel extends React.Component {
     constructor(props) {
@@ -20,37 +21,36 @@ export default class BookViewPanel extends React.Component {
         this.addCart = this.addCart.bind(this);
         this.addOrder = this.addOrder.bind(this);
         this.state = {
-            bookId: (props.bookId)? props.bookId : '0',
-            bookImg: (props.bookImg)? props.bookImg : Placeholder,
-            bookTitle: (props.bookTitle)? props.bookTitle : 'Untitled',
-            bookAuthor: (props.bookAuthor)? props.bookAuthor : 'Author',
-            bookDesc: (props.bookDesc)? props.bookDesc : 'No description available',
-            bookPrice: (props.bookPrice)? props.bookPrice : '0.00',
-            bookStock: (props.bookStock && props.bookStock > 0)? props.bookStock : 0,
-            bookIsbn13: (props.bookIsbn13)? props.bookIsbn13 : "N/A",
-            bookLang: (props.bookLang)? props.bookLang : "N/A",
+            isLoading: true,
+            book: {
+                author: null,
+                description: null,
+                id: null,
+                imageUrl: null,
+                isbn: null,
+                language: null,
+                price: null,
+                sales: null,
+                stock: null,
+                title: null
+            },
             currency: '$'
         }
     }
 
+    componentDidMount() {
+        const bookId = window.location.pathname.split('/').pop();
+        bookService.getBook(bookId).then(book => {
+            this.setState({ book: book, isLoading: false });
+        });
+    }
+
     addCart() {
-        let cartItems = [];
-        if (localStorage.getItem('cart')) {
-            cartItems = JSON.parse(localStorage.getItem('cart'));
-        }
 
-        let itemIndex = cartItems.findIndex(x => x.pid === this.state.bookId);
-        if (itemIndex === -1) {
-            cartItems.push({'pid': this.state.bookId, 'qty': 1});
-        } else {
-            cartItems[itemIndex].qty += 1;
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cartItems));
     };
 
     addOrder() {
-        console.log("Tst");
+
     };
 
     render() {
@@ -67,24 +67,24 @@ export default class BookViewPanel extends React.Component {
                     gap={4}
                 >
                     <BookViewImage
-                        url={this.state.bookImg}
+                        url={this.state.book.imageUrl}
                     />
 
                     <BookViewInfo
-                        title={this.state.bookTitle}
-                        author={this.state.bookAuthor}
-                        description={this.state.bookDesc}
+                        title={this.state.book.title}
+                        author={this.state.book.author}
+                        description={this.state.book.description}
                     />
 
                     <BookViewTable
-                        stock={this.state.bookStock}
-                        isbn13={this.state.bookIsbn13}
-                        language={this.state.bookLang}
+                        stock={this.state.book.stock}
+                        isbn={this.state.book.isbn}
+                        language={this.state.book.language}
                     />
 
                     <BookViewCheckout
                         currency={this.state.currency}
-                        price={this.state.bookPrice}
+                        price={this.state.book.price}
                         onCart={this.addCart}
                         onOrder={this.addOrder}
                     />
@@ -144,7 +144,7 @@ function BookViewTable(props) {
                     </Tr>
                     <Tr>
                         <Td>ISBN-13</Td>
-                        <Td>{props.isbn13}</Td>
+                        <Td>{props.isbn}</Td>
                     </Tr>
                 </Tbody>
             </Table>

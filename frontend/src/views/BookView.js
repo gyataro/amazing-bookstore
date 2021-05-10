@@ -1,10 +1,11 @@
 import React from "react";
 import { Flex, Box } from "@chakra-ui/react";
+import { withRouter } from 'react-router-dom';
 import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import BookViewPanel from "../components/bookView/BookViewPanel"
 
-export default class BookView extends React.Component {
+class BookView extends React.Component {
     render() {
         return (
             <Flex
@@ -30,4 +31,6 @@ export default class BookView extends React.Component {
         );
     }
 }
+
+export default withRouter(BookView);
 

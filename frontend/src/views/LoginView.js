@@ -14,38 +14,52 @@ import {
     Image
 } from '@chakra-ui/react';
 import {
-    Link
+    Link,
+    withRouter
 } from 'react-router-dom';
 import {
     useForm
 } from "react-hook-form";
-import * as userService from '../services/userService';
+import { useLocation, useHistory } from "react-router-dom";
 import authCoverCSS from "../css/authcover.module.css";
 import logo from '../assets/logo-dark.svg';
 
+import { authenticationService } from "../services/authService";
+import { history } from "../utils/history";
 
-export default function LoginView() {
-    return (
-        <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'gray.50'}>
-            <Flex flex={[0, 0, 0, 1]}>
-                <div className={authCoverCSS.cover_container}>
-                    <div className={authCoverCSS.cover_left}></div>
-                </div>
+class LoginView extends React.Component {
+    constructor(props) {
+        super();
+
+        // redirect to home if already logged in
+        if (authenticationService.currentUserValue) {
+            history.push('/');
+        }
+    }
+
+    render() {
+        return (
+            <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'gray.50'}>
+                <Flex flex={[0, 0, 0, 1]}>
+                    <div className={authCoverCSS.cover_container}>
+                        <div className={authCoverCSS.cover_left}></div>
+                    </div>
+                </Flex>
+                <Flex flex={4}>
+                    <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+                        <LoginHeader />
+                        <LoginForm />
+                        <LoginFooter />
+                    </Stack>
+                </Flex>
+                <Flex flex={[0, 0, 0, 1]}>
+                    <div className={authCoverCSS.cover_container}>
+                        <div className={authCoverCSS.cover_right}></div>
+                    </div>
+                </Flex>
             </Flex>
-            <Flex flex={4}>
-                <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-                    <LoginHeader />
-                    <LoginForm />
-                    <LoginFooter />
-                </Stack>
-            </Flex>
-            <Flex flex={[0, 0, 0, 1]}>
-                <div className={authCoverCSS.cover_container}>
-                    <div className={authCoverCSS.cover_right}></div>
-                </div>
-            </Flex>
-        </Flex>
-    );
+        )
+    }
 };
 
 function LoginHeader(props) {
@@ -67,11 +81,23 @@ function LoginHeader(props) {
 function LoginForm(props) {
     // Functions to link form input with submission
     const { handleSubmit, errors, register, formState } = useForm();
+    const location = useLocation();
+    const history = useHistory();
 
     function onSubmit(values) {
         return new Promise(resolve => {
             setTimeout(() => {
-                userService.login(values);
+                //userService.login(values);
+                authenticationService.login(values.username, values.password)
+                    .then(
+                        user => {
+                            const { from } = location.state || { from: { pathname: "/" }};
+                            history.push(from);
+                        },
+                        error => {
+
+                        }
+                    )
                 resolve();
             }, 1500);
         });
@@ -81,11 +107,11 @@ function LoginForm(props) {
         <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={4}>
-                    <FormControl id="email">
-                        <FormLabel>Email address</FormLabel>
+                    <FormControl id="username">
+                        <FormLabel>Username</FormLabel>
                         <Input
-                            name="email"
-                            type="email"
+                            name="username"
+                            type="username"
                             ref={register()} // Link to onSubmit()
                         />
                     </FormControl>
@@ -133,3 +159,5 @@ function LoginFooter(props) {
         </Text>
     );
 };
+
+export default withRouter(LoginView);

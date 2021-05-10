@@ -7,24 +7,33 @@ import {
     Text,
     SimpleGrid
 } from "@chakra-ui/react"
+import axios from "axios";
 import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import BookItem from "../components/general/BookItem"
 import { BOOKLIST } from "../assets/booklist.js"
 import queryString from "query-string"
 
+import { bookService } from "../services/bookService";
+import { authenticationService } from "../services/authService";
+
 export default class SearchView extends React.Component {
     constructor(props) {
         super(props);
-        this.updateList = this.updateList.bind(this);
+        //this.updateList = this.updateList.bind(this);
         this.state = {
+            currentUser: authenticationService.currentUserValue,
             bookList: [],
             query: "",
             isDefault: true
         };
     }
 
-    updateList(search) {
+    componentDidMount() {
+        bookService.getBooks().then(books => this.setState({ bookList: books }));
+    }
+
+    /*updateList(search) {
         let tempList = [];
         const filterText = (search.query == null || search.query.length <= 0)? "" : search.query;
 
@@ -66,7 +75,7 @@ export default class SearchView extends React.Component {
         if (prevSearch.query !== currSearch.query){
             this.updateList(currSearch);
         }
-    }
+    }*/
 
     render() {
         return (
@@ -99,7 +108,17 @@ export default class SearchView extends React.Component {
                     </Box>
 
                     <SimpleGrid columns={{base: 1, md: 3, xl: 6}} spacing={"0px"} justify={"center"} width={"100%"}>
-                        {this.state.bookList}
+                        { this.state.bookList.map(book =>
+                            <Box mt={16} mx={2} key={book.id}>
+                                <BookItem
+                                bookId={book.id}
+                                bookUrl={book.imageUrl}
+                                bookTitle={book.title}
+                                bookAuthor={book.author}
+                                bookPrice={book.price}
+                                />
+                            </Box>
+                        )}
                     </SimpleGrid>
 
                 </Stack>
