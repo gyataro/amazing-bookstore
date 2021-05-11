@@ -1,9 +1,10 @@
 package com.xiwenteoh.bookstore.entity;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 
 public class Book {
-    private Long id;
+    private Integer id;
     private String isbn;
     private String title;
     private String description;
@@ -15,7 +16,7 @@ public class Book {
     private Integer stock;
 
     public Book(
-            Long id,
+            Integer id,
             String isbn,
             String title,
             String description,
@@ -38,7 +39,7 @@ public class Book {
         this.stock = stock;
     }
 
-    public Long getId() { return id; }
+    public Integer getId() { return id; }
     public String getIsbn() { return isbn; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }

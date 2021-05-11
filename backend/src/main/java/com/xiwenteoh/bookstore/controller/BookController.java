@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,12 +21,12 @@ public class BookController {
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/api/book", method = RequestMethod.GET)
     public String getBook() {
-        List<Book> result = new ArrayList<Book>();
+        List<Book> result;
 
         result = jdbcTemplate.query(
                 "SELECT * FROM book",
                 (rs, rowNum) -> new Book(
-                        rs.getLong("book_id"),
+                        rs.getInt("book_id"),
                         rs.getString("isbn"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -40,9 +39,7 @@ public class BookController {
                 )
         );
 
-        String booksJSON = JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
-
-        return booksJSON;
+        return JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -54,7 +51,7 @@ public class BookController {
             result = jdbcTemplate.queryForObject(
                     "SELECT * FROM book WHERE book_id = ?",
                     (rs, rowNum) -> new Book(
-                            rs.getLong("book_id"),
+                            rs.getInt("book_id"),
                             rs.getString("isbn"),
                             rs.getString("title"),
                             rs.getString("description"),
@@ -71,8 +68,6 @@ public class BookController {
             throw new BookNotFoundException(id);
         }
 
-        String booksJSON = JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
-
-        return booksJSON;
+        return JSON.toJSONString(result, SerializerFeature.BrowserCompatible);
     }
 }
