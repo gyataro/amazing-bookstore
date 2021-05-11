@@ -7,11 +7,9 @@ import {
     Text,
     SimpleGrid
 } from "@chakra-ui/react"
-import axios from "axios";
 import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import BookItem from "../components/general/BookItem"
-import { BOOKLIST } from "../assets/booklist.js"
 import queryString from "query-string"
 
 import { bookService } from "../services/bookService";

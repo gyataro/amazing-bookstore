@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { Spinner, Center } from '@chakra-ui/react';
 import { authenticationService } from "../services/authService";
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (

@@ -23,7 +23,7 @@ export default class CartItem extends React.Component {
             bookUrl: (props.bookUrl)? props.bookUrl : Placeholder,
             bookTitle: (props.bookTitle)? props.bookTitle : 'Untitled',
             bookPrice: (props.bookPrice)? props.bookPrice : '1.00',
-            quantity: 1,
+            quantity: (props.quantity)? props.quantity : 0,
             currency: '$'
         }
     }
@@ -48,7 +48,11 @@ export default class CartItem extends React.Component {
 
                 <CartItemCounter onCounter={this.handleCounter} quantity={this.state.quantity}/>
 
-                <CartItemPrice currency={this.state.currency} bookPrice={this.state.bookPrice}/>
+                <CartItemPrice
+                    currency={this.state.currency}
+                    bookPrice={this.state.bookPrice}
+                    quantity={this.state.quantity}
+                />
             </Grid>
         );
     }
@@ -58,7 +62,7 @@ function CartItemCounter(props) {
     return (
         <GridItem colSpan={2} align={"left"}>
             <NumberInput
-                onChange={props.onCounter}
+                onChange={(value) => props.onCounter(value)}
                 size="md"
                 w={{ base: "100%", lg: "50%" }}
                 defaultValue={props.quantity}
@@ -99,7 +103,7 @@ function CartItemPrice(props) {
     return (
         <GridItem colSpan={2} mt={"8px"}>
             <Text fontSize="lg">
-                <b>{props.currency}{props.bookPrice}</b>
+                <b>{props.currency}{(props.bookPrice * props.quantity).toFixed(2)}</b>
             </Text>
         </GridItem>
     );

@@ -5,21 +5,20 @@ import {
     Divider, Grid,
     GridItem,
     Heading,
-    Image, NumberDecrementStepper, NumberIncrementStepper,
-    NumberInput, NumberInputField, NumberInputStepper, Stack,
+    Image,
+    Stack,
     Table, Tbody, Td, Th, Thead, Tr,
-    Text,
-    useToast
+    Text
 } from "@chakra-ui/react";
 import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
-import Placeholder from "../../assets/placeholder.svg";
 import { bookService } from "../../services/bookService";
+import { cartService } from "../../services/cartService";
+import { history } from "../../utils/history";
 
 export default class BookViewPanel extends React.Component {
     constructor(props) {
         super(props);
         this.addCart = this.addCart.bind(this);
-        this.addOrder = this.addOrder.bind(this);
         this.state = {
             isLoading: true,
             book: {
@@ -45,12 +44,9 @@ export default class BookViewPanel extends React.Component {
         });
     }
 
-    addCart() {
-
-    };
-
-    addOrder() {
-
+    addCart(isCheckout) {
+        cartService.addToCart(this.state.book.id, 1);
+        if(isCheckout) history.push('/cart');
     };
 
     render() {
@@ -86,7 +82,6 @@ export default class BookViewPanel extends React.Component {
                         currency={this.state.currency}
                         price={this.state.book.price}
                         onCart={this.addCart}
-                        onOrder={this.addOrder}
                     />
 
                 </Grid>
@@ -170,6 +165,7 @@ function BookViewCheckout(props) {
                     w={{ base: "100%", lg: "100%" }}
                     bgColor="#FBD38D"
                     variant="solid"
+                    onClick={() => props.onCart(true)}
                 >
                     <FaShoppingBag />&nbsp;&nbsp;Buy Now
                 </Button>
@@ -177,7 +173,7 @@ function BookViewCheckout(props) {
                     w={{ base: "100%", lg: "100%" }}
                     bgColor="#FF9900"
                     variant="solid"
-                    onClick={props.onCart}
+                    onClick={() => props.onCart(false)}
                 >
                     <FaShoppingCart />&nbsp;&nbsp;Add to Cart
                 </Button>

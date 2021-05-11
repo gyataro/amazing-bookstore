@@ -18,6 +18,7 @@ import {
     FaShoppingBasket
 } from "react-icons/fa";
 import CartItem from "./CartItem";
+import { cartService } from "../../services/cartService";
 
 export default class CartViewPanel extends React.Component {
     constructor(props) {
@@ -26,12 +27,17 @@ export default class CartViewPanel extends React.Component {
         this.state = {
             subtotal: 0.00,
             shipping: 0.00,
-            currency: "$"
+            currency: "$",
+            cart: []
         };
     };
 
     handleCounter = (value) => {
         console.log(value);
+    }
+
+    componentDidMount() {
+        cartService.getCart().then(cart => this.setState({ cart: cart }));
     }
 
     render () {
@@ -41,14 +47,19 @@ export default class CartViewPanel extends React.Component {
                 direction={{ base: "column-reverse", md: "row" }}
             >
                 <Box flex={6} mt={["48px", "0px"]}>
-                    <Box>
-                        <CartItem onCounter={this.handleCounter} />
-                        <Divider mb={["10px", "28px"]} mt={"10px"} />
-                        <CartItem onCounter={this.handleCounter} />
-                        <Divider mb={["10px", "28px"]} mt={"10px"} />
-                        <CartItem onCounter={this.handleCounter} />
-                        <Divider mb={["10px", "28px"]} mt={"10px"} />
-                    </Box>
+                    { this.state.cart.map(book =>
+                        <Box key={book.bookId}>
+                            <CartItem
+                                onCounter={this.handleCounter}
+                                bookId={book.bookId}
+                                bookUrl={book.imageUrl}
+                                bookTitle={book.title}
+                                bookPrice={book.price}
+                                quantity={book.quantity}
+                            />
+                            <Divider mb={["10px", "28px"]} mt={"10px"} />
+                        </Box>
+                    )}
                 </Box>
                 <Box flex={4}>
                     <CartPageCheckout

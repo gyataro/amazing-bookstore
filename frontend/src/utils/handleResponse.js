@@ -1,4 +1,5 @@
 import { authenticationService } from '../services/authService';
+import { history } from "./history";
 
 export function handleResponse(response) {
 
@@ -11,6 +12,10 @@ export function handleResponse(response) {
                 // automatically logout user if API returns 401 Unauthorized or 403 Forbidden
                 authenticationService.logout();
                 window.location.reload(true);
+            }
+            if ([404].indexOf(response.status) !== -1) {
+                // handle resource not found
+                history.push('/error');
             }
 
             const error = (data && data.message) || response.statusText;
