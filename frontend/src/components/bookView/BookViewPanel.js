@@ -8,7 +8,8 @@ import {
     Image,
     Stack,
     Table, Tbody, Td, Th, Thead, Tr,
-    Text
+    Text,
+    useToast
 } from "@chakra-ui/react";
 import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
 import { bookService } from "../../services/bookService";
@@ -81,6 +82,7 @@ export default class BookViewPanel extends React.Component {
                     <BookViewCheckout
                         currency={this.state.currency}
                         price={this.state.book.price}
+                        title={this.state.book.title}
                         onCart={this.addCart}
                     />
 
@@ -148,6 +150,8 @@ function BookViewTable(props) {
 }
 
 function BookViewCheckout(props) {
+    const toast = useToast();
+
     return (
         <GridItem
             px={"24px"}
@@ -173,7 +177,17 @@ function BookViewCheckout(props) {
                     w={{ base: "100%", lg: "100%" }}
                     bgColor="#FF9900"
                     variant="solid"
-                    onClick={() => props.onCart(false)}
+                    onClick={() => {
+                        props.onCart(false);
+                        toast({
+                            title: "Book added to cart",
+                            description: `We've added ${props.title} for you.`,
+                            status: "success",
+                            position: "top",
+                            duration: 5000,
+                            isClosable: true,
+                        });
+                    }}
                 >
                     <FaShoppingCart />&nbsp;&nbsp;Add to Cart
                 </Button>

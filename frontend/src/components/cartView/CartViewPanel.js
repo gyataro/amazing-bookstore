@@ -9,21 +9,19 @@ import {
     Text,
     Box,
     Flex,
-    Button,
     Stack,
     Heading,
     Divider
 } from '@chakra-ui/react';
-import {
-    FaShoppingBasket
-} from "react-icons/fa";
 import CartItem from "./CartItem";
+import Checkout from "./Checkout";
 import { cartService } from "../../services/cartService";
 
 export default class CartViewPanel extends React.Component {
     constructor(props) {
         super(props);
         this.handleCounter = this.handleCounter.bind(this);
+        this.handleSubtotal = this.handleSubtotal.bind(this);
         this.state = {
             subtotal: 0.00,
             shipping: 0.00,
@@ -32,12 +30,31 @@ export default class CartViewPanel extends React.Component {
         };
     };
 
-    handleCounter = (value) => {
-        console.log(value);
+    handleSubtotal = () => {
+        this.setState(prevState => {
+           return {
+               ...prevState,
+               subtotal: prevState.cart.reduce((sum, item) => (
+                   sum += item.price * item.quantity
+               ), 0)
+           }
+        });
+    }
+
+    handleCounter = (updateItem) => {
+        this.setState(prevState => {
+            prevState.cart.map(item => {
+                return item.bookId === updateItem.bookId ? item.quantity = updateItem.quantity : item;
+            })
+        });
+        this.handleSubtotal();
     }
 
     componentDidMount() {
-        cartService.getCart().then(cart => this.setState({ cart: cart }));
+        cartService.getCart().then(cart => {
+            this.setState({ cart: cart });
+            this.handleSubtotal();
+        });
     }
 
     render () {
@@ -93,32 +110,24 @@ function CartPageCheckout(props) {
                     <Tbody>
                         <Tr>
                             <Td>Subtotal</Td>
-                            <Td isNumeric={"true"}>{props.currency}{props.subtotal}</Td>
+                            <Td isNumeric={"true"}>{props.currency}{props.subtotal.toFixed(2)}</Td>
                         </Tr>
                         <Tr>
                             <Td>Shipping</Td>
-                            <Td isNumeric={"true"}>{props.currency}{props.shipping}</Td>
+                            <Td isNumeric={"true"}>{props.currency}{props.shipping.toFixed(2)}</Td>
                         </Tr>
                         <Tr>
                             <Td><Text fontSize="2xl"><b>Total:</b></Text></Td>
                             <Td isNumeric={"true"}>
                                 <Text fontSize="2xl">
-                                    <b>{props.currency}{props.shipping + props.subtotal}</b>
+                                    <b>{props.currency}{(props.shipping + props.subtotal).toFixed(2)}</b>
                                 </Text>
                             </Td>
                         </Tr>
                     </Tbody>
                 </Table>
 
-                <Button
-                    color={"white"}
-                    bg={"#2F855A"}
-                    _hover={{
-                        bg: "#48BB78"
-                    }}
-                >
-                    <FaShoppingBasket />&nbsp;&nbsp;Continue Checkout
-                </Button>
+                { Checkout() }
             </Stack>
         </Box>
     );

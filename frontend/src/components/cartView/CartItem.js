@@ -28,11 +28,10 @@ export default class CartItem extends React.Component {
         }
     }
 
-    handleCounter(value) {
-        this.setState({quantity: value});
-        this.props.onCounter({"id": this.state.bookId, "value": value});
+    handleCounter(newQuantity) {
+        this.setState({quantity: newQuantity});
+        this.props.onCounter({"bookId": this.state.bookId, "quantity": newQuantity});
     }
-
 
     render() {
         return (
@@ -62,7 +61,7 @@ function CartItemCounter(props) {
     return (
         <GridItem colSpan={2} align={"left"}>
             <NumberInput
-                onChange={(value) => props.onCounter(value)}
+                onChange={(value) => value.length > 0 ? props.onCounter(parseInt(value)) : props.onCounter(1)}
                 size="md"
                 w={{ base: "100%", lg: "50%" }}
                 defaultValue={props.quantity}
@@ -86,7 +85,7 @@ function CartItemImage(props) {
             </Box>
         </GridItem>
     );
-};
+}
 
 function CartItemTitle(props) {
     return (
@@ -97,7 +96,7 @@ function CartItemTitle(props) {
             <Link color={"red"}><b>X</b> Remove</Link>
         </GridItem>
     );
-};
+}
 
 function CartItemPrice(props) {
     return (
@@ -107,4 +106,4 @@ function CartItemPrice(props) {
             </Text>
         </GridItem>
     );
-};
+}
