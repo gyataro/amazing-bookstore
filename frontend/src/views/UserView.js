@@ -16,13 +16,23 @@ import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import UserOrderPanel from "../components/userView/UserOrderPanel"
 import UserStatPanel from "../components/userView/UserStatPanel"
+import { authenticationService } from "../services/authService";
+import { orderService } from "../services/orderService";
 
 export default class UserPage extends React.Component {
     constructor(props) {
         super(props);
+        //this.handleOrders = this.handleOrders.bind(this);
         this.state = {
-            userName: (props.userName)? props.userName : "User"
+            isLoggedIn: typeof authenticationService.currentUserValue != "undefined",
+            orderList: []
         }
+    }
+
+    componentDidMount() {
+        orderService.getOrders().then(orders => {
+            this.setState({ orderList: orders });
+        });
     }
 
     render() {
@@ -44,7 +54,7 @@ export default class UserPage extends React.Component {
                     align={"center"}
                 >
 
-                    <UserHero userName={this.state.userName} />
+                    <UserHero isLoggedIn={this.state.isLoggedIn} user={authenticationService.currentUserValue} />
 
                     <Tabs
                         mt={"48px"}
@@ -61,7 +71,7 @@ export default class UserPage extends React.Component {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <UserOrderPanel />
+                                <UserOrderPanel orderList={this.state.orderList}/>
                             </TabPanel>
                             <TabPanel>
                                 <UserStatPanel />
@@ -87,14 +97,14 @@ function UserHero(props) {
             <Stack direction={"row"} align={"center"}>
                 <UserAvatar />
                 <Heading fontSize={"3xl"} overflow={"hidden"}>
-                    Welcome, {props.userName}
+                    Welcome, {(props.isLoggedIn)? props.user.username.toString() : "User"}
                 </Heading>
             </Stack>
         </Box>
     )
 }
 
-function UserAvatar(props) {
+function UserAvatar(avatar) {
     return (
         <Box display={{ base: "none", md: "block" }}>
             <IoPersonCircleOutline fontSize={"72px"}/>

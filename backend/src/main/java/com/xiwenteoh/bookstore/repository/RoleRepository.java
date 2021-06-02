@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    Optional<Role> findByRoleType(EnumRole roleType);
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Set<Role> findByRoleType(EnumRole roleType);
 }

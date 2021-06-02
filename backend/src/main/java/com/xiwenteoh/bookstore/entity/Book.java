@@ -1,53 +1,37 @@
 package com.xiwenteoh.bookstore.entity;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
+@Data
+@Entity
+@Table(name = "book")
 public class Book {
+    @Id
+    @Column(name = "book_id")
     private Integer id;
+
     private String isbn;
     private String title;
     private String description;
     private String author;
-    private String image_url;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
     private String language;
     private BigDecimal price;
     private Integer sales;
     private Integer stock;
 
-    public Book(
-            Integer id,
-            String isbn,
-            String title,
-            String description,
-            String author,
-            String image_url,
-            String language,
-            BigDecimal price,
-            Integer sales,
-            Integer stock
-    ) {
-        this.id = id;
-        this.isbn = isbn;
-        this.title = title;
-        this.description = description;
-        this.author = author;
-        this.image_url = image_url;
-        this.language = language;
-        this.price = price;
-        this.sales = sales;
-        this.stock = stock;
-    }
-
-    public Integer getId() { return id; }
-    public String getIsbn() { return isbn; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getAuthor() { return author; }
-    public String getImageUrl() { return image_url; }
-    public String getLanguage() { return language; }
-    public BigDecimal getPrice() { return price; }
-    public Integer getSales() { return sales; }
-    public Integer getStock() { return stock; }
+    @Column(name = "is_active")
+    @JSONField(serialize = false)
+    private boolean active;
 }
 

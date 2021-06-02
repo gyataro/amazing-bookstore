@@ -43,7 +43,7 @@ export default class CartItem extends React.Component {
             >
                 <CartItemImage bookUrl={this.state.bookUrl}/>
 
-                <CartItemTitle bookTitle={this.state.bookTitle}/>
+                <CartItemTitle onCounter={this.handleCounter} bookTitle={this.state.bookTitle}/>
 
                 <CartItemCounter onCounter={this.handleCounter} quantity={this.state.quantity}/>
 
@@ -61,7 +61,10 @@ function CartItemCounter(props) {
     return (
         <GridItem colSpan={2} align={"left"}>
             <NumberInput
-                onChange={(value) => value.length > 0 ? props.onCounter(parseInt(value)) : props.onCounter(1)}
+                onChange={(value) =>
+                    value.length > 0 && !isNaN(parseInt(value)) ?
+                        props.onCounter(parseInt(value)) : props.onCounter(1)
+                }
                 size="md"
                 w={{ base: "100%", lg: "50%" }}
                 defaultValue={props.quantity}
@@ -93,7 +96,7 @@ function CartItemTitle(props) {
             <Text width={["100%", "85%"]} noOfLines={3} isTruncated>
                 {props.bookTitle}
             </Text>
-            <Link color={"red"}><b>X</b> Remove</Link>
+            <Link color={"red"} onClick={() => props.onCounter(parseInt(0))}><b>X</b> Remove</Link>
         </GridItem>
     );
 }

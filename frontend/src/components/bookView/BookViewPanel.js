@@ -26,7 +26,7 @@ export default class BookViewPanel extends React.Component {
                 author: null,
                 description: null,
                 id: null,
-                imageUrl: null,
+                image_url: null,
                 isbn: null,
                 language: null,
                 price: null,
@@ -46,7 +46,7 @@ export default class BookViewPanel extends React.Component {
     }
 
     addCart(isCheckout) {
-        cartService.addToCart(this.state.book.id, 1);
+        cartService.addItem(this.state.book.id, 1);
         if(isCheckout) history.push('/cart');
     };
 
@@ -64,7 +64,7 @@ export default class BookViewPanel extends React.Component {
                     gap={4}
                 >
                     <BookViewImage
-                        url={this.state.book.imageUrl}
+                        url={this.state.book.image_url}
                     />
 
                     <BookViewInfo

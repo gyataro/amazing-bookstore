@@ -14,40 +14,53 @@ import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import BookItem from "../components/general/BookItem"
 import LandingBannerImage from "../assets/landing-banner.jpg"
+import { bookService } from "../services/bookService";
 
-export default function LandingView(props) {
-    return (
-        <Flex
-            direction={"column"}
-            align={"center"}
-            w={"100%"}
-            minWidth={"320px"}
-            m={"0 auto"}
-            {...props}
-        >
-            <Header />
+export default class LandingView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            bookList: [],
+        };
+    }
 
-            <Stack
-                maxW={"90%"}
+    componentDidMount() {
+        bookService.getBooks().then(books => this.setState({ bookList: books }));
+    }
+
+    render() {
+        return (
+            <Flex
                 direction={"column"}
                 align={"center"}
-                mt={{ base: "80px", md: "20px", xl: "20px"}}
-                spacing={"28px"}
+                w={"100%"}
+                minWidth={"320px"}
+                m={"0 auto"}
             >
-                <LandingBanner url={ LandingBannerImage }/>
+                <Header />
 
-                <Divider/>
+                <Stack
+                    maxW={"90%"}
+                    direction={"column"}
+                    align={"center"}
+                    mt={{ base: "80px", md: "20px", xl: "20px"}}
+                    spacing={"28px"}
+                >
+                    <LandingBanner url={ LandingBannerImage }/>
 
-                <LandingBestselling />
+                    <Divider/>
 
-                <Divider />
+                    <LandingBestselling bookList={this.state.bookList}/>
 
-                <LandingCategories />
-            </Stack>
+                    <Divider />
 
-            <Footer />
-        </Flex>
-    );
+                    <LandingCategories />
+                </Stack>
+
+                <Footer />
+            </Flex>
+        );
+    }
 }
 
 function LandingBanner(props) {
@@ -61,15 +74,21 @@ function LandingBanner(props) {
 }
 
 function LandingBestselling(props) {
-    var numbers = [];
-    for (var i = 1; i <= 6; i++) {
-        numbers.push(i);
+    let length = Math.min(props.bookList.length, 6);
+    let listItems = [];
+    for (let i = 1; i <= length; i++) {
+        listItems.push(
+            <Box mt={16} mx={2} key={i}>
+                <BookItem
+                    bookId={props.bookList[i].id}
+                    bookUrl={props.bookList[i].image_url}
+                    bookTitle={props.bookList[i].title}
+                    bookAuthor={props.bookList[i].author}
+                    bookPrice={props.bookList[i].price}
+                />
+            </Box>
+        )
     }
-    const listItems = numbers.map((number) =>
-        <Box mt={16} mx={2} key={number}>
-            <BookItem />
-        </Box>
-    );
 
     return (
         <Box

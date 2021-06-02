@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Box,
     Button,
     Stack,
     Input,
@@ -30,7 +29,12 @@ export default class Excel extends React.Component {
             edit: null,
             search: false,
             preSearchData: null,
+            writeEnable: false
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ data: nextProps.initialData });
     }
 
     renderToolbar = () => { return (
@@ -90,14 +94,15 @@ export default class Excel extends React.Component {
                 row.map(function (cell, idx) {
                 let content = cell;
                 let edit = this.state.edit;
-                if (edit && edit.row === rowidx && edit.cell === idx) {
+                let writeEnable = this.state.writeEnable;
+                if (writeEnable && edit && edit.row === rowidx && edit.cell === idx) {
                 content = (
                 <form onSubmit={this.save}>
                 <Input type="text" defaultValue={cell} variant="filled"/>
                 </form>
                 );
             }
-                return <Td key={idx} data-row={rowidx}>{content}</Td>;
+                return <Td key={idx} data-row={rowidx} maxWidth={"100px"} overflow={"hidden"} textOverflow={"ellipsis"}>{content}</Td>;
             }, this)}
                 </Tr>
                 );

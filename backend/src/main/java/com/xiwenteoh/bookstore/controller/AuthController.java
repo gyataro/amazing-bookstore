@@ -1,7 +1,12 @@
 package com.xiwenteoh.bookstore.controller;
 
-import com.xiwenteoh.bookstore.payload.response.JwtResponse;
-import com.xiwenteoh.bookstore.payload.request.LoginRequest;
+import com.xiwenteoh.bookstore.constant.EnumRole;
+import com.xiwenteoh.bookstore.entity.Role;
+import com.xiwenteoh.bookstore.entity.User;
+import com.xiwenteoh.bookstore.dto.request.RegisterRequest;
+import com.xiwenteoh.bookstore.dto.response.JwtResponse;
+import com.xiwenteoh.bookstore.dto.request.LoginRequest;
+import com.xiwenteoh.bookstore.dto.response.MessageResponse;
 import com.xiwenteoh.bookstore.repository.RoleRepository;
 import com.xiwenteoh.bookstore.repository.UserRepository;
 import com.xiwenteoh.bookstore.security.jwt.JwtUtils;
@@ -14,7 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,8 +39,8 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -51,5 +58,27 @@ public class AuthController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest registerRequest) {
+
+        if(userRepository.existsByUsernameOrEmail(
+                registerRequest.getUsername(),
+                registerRequest.getEmail()
+        )) {
+            return ResponseEntity.ok(new MessageResponse("Username / email already taken"));
+        }
+
+        User user = new User();
+        user.setEmail(registerRequest.getEmail());
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(registerRequest.getPassword());
+
+        Set<Role> roles = roleRepository.findByRoleType(EnumRole.ROLE_USER);
+        user.setRoles(roles);
+        userRepository.saveAndFlush(user);
+
+        return ResponseEntity.ok(new MessageResponse("Success"));
     }
 }

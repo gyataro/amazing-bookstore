@@ -110,7 +110,7 @@ export default class SearchView extends React.Component {
                             <Box mt={16} mx={2} key={book.id}>
                                 <BookItem
                                 bookId={book.id}
-                                bookUrl={book.imageUrl}
+                                bookUrl={book.image_url}
                                 bookTitle={book.title}
                                 bookAuthor={book.author}
                                 bookPrice={book.price}

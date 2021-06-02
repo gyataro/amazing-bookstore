@@ -3,15 +3,23 @@ import {
     Flex,
     Box,
     Image,
-    Button
+    Button,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuGroup,
+    MenuItem,
+    MenuDivider
 } from '@chakra-ui/react';
 import {
     Link
 } from 'react-router-dom';
 import Search from "./Search"
 import logo from '../../assets/logo-light.svg';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaUserCircle, FaCaretDown } from 'react-icons/fa';
 import { BsThreeDotsVertical, BsX } from 'react-icons/bs';
+import { authenticationService } from "../../services/authService";
+import { history } from "../../utils/history";
 
 const MenuItems = props => {
     const { children, isLast, to = "/", ...rest } = props
@@ -30,6 +38,7 @@ const MenuItems = props => {
 export default function Header(props) {
     const [show, setShow] = React.useState(false)
     const toggleMenu = () => setShow(!show)
+    const isLoggedIn = authenticationService.currentUserValue != null
 
     return (
         <Flex
@@ -69,6 +78,7 @@ export default function Header(props) {
                     justify={["center", "space-between", "flex-end", "flex-end"]}
                     direction={["column", "row", "row", "row"]}
                     pt={[8, 8, 0, 0]}
+                    pb={[4, 0, 0, 0]}
                 >
                     <MenuItems to="/cart">
                         <Button
@@ -76,41 +86,87 @@ export default function Header(props) {
                             size="md"
                             rounded="md"
                             color={"white"}
-                            colorScheme="teal"
-                            variant="link"
+                            colorScheme="none"
+                            variant="ghost"
                         >
-                            My Cart (0)
+                            My Cart
                         </Button>
                     </MenuItems>
-                    <MenuItems to="/login">
-                        <Button
-                            size="md"
-                            rounded="md"
-                            color={"white"}
-                            colorScheme="teal"
-                            variant="link"
-                        >
-                        Login
-                        </Button>
-                    </MenuItems>
-                    <MenuItems to="/register" isLast>
-                        <Button
-                            size="md"
-                            rounded="md"
-                            color={"white"}
-                            bg={"#2B6CB0"}
-                            _hover={{
-                                bg: "#4299E1"
-                            }}
-                        >
-                            Sign Up
-                        </Button>
-                    </MenuItems>
+                    {
+                        (isLoggedIn)? hasUser(authenticationService.currentUserValue) : noUser()
+                    }
                 </Flex>
                 <Box pt={[5, 5, 0, 0]} display={{ base: "block", md: "none" }}>
                     <Search />
                 </Box>
             </Box>
         </Flex>
+    );
+}
+
+function hasUser(user) {
+    return (
+        <>
+            <Menu>
+                <MenuButton
+                    as={Button}
+                    leftIcon={<FaUserCircle />}
+                    rightIcon={<FaCaretDown />}
+                    size="md"
+                    rounded="md"
+                    color={"white"}
+                    _hover={{
+                        bg: "#FF9900",
+                        color: "black"
+                    }}
+                    variant="outline"
+                >
+                    Hi, {user.username.toString()}
+                </MenuButton>
+                <MenuList color={"black"}>
+                    <MenuGroup title="Profile">
+                        <MenuItem onClick={() => history.push('/user')}>My Orders</MenuItem>
+                        <MenuItem onClick={() => {authenticationService.logout(); history.push('/login')}}>Logout</MenuItem>
+                    </MenuGroup>
+                    <MenuDivider />
+                    <MenuGroup title="Help">
+                        <MenuItem>Support</MenuItem>
+                        <MenuItem>FAQ</MenuItem>
+                    </MenuGroup>
+                </MenuList>
+            </Menu>
+
+        </>
+    )
+}
+
+function noUser() {
+    return (
+        <>
+            <MenuItems to="/login">
+                <Button
+                    size="md"
+                    rounded="md"
+                    color={"white"}
+                    colorScheme="teal"
+                    variant="link"
+                >
+                    Login
+                </Button>
+            </MenuItems>
+            <MenuItems to="/register" isLast>
+                <Button
+                    size="md"
+                    rounded="md"
+                    color={"white"}
+                    bg={"#2B6CB0"}
+                    _hover={{
+                        bg: "#4299E1"
+                    }}
+                >
+                    Sign Up
+                </Button>
+            </MenuItems>
+        </>
     );
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Modal,
     ModalOverlay,
@@ -11,8 +12,9 @@ import {
     Text
 } from "@chakra-ui/react"
 import { FaShoppingBasket, FaRegCheckCircle } from "react-icons/fa";
-import React from "react";
 import { Link } from "react-router-dom";
+import { orderService } from "../../services/orderService";
+
 const { useDisclosure } = require("@chakra-ui/hooks");
 
 export default function Checkout() {
@@ -20,6 +22,7 @@ export default function Checkout() {
 
     function handleCheckout() {
         onOpen();
+        orderService.addOrder();
     }
 
     return (

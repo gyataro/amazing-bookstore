@@ -1,4 +1,4 @@
-package com.xiwenteoh.bookstore.payload.response;
+package com.xiwenteoh.bookstore.dto.response;
 
 public class MessageResponse {
     private String message;

@@ -42,12 +42,24 @@ export default class CartViewPanel extends React.Component {
     }
 
     handleCounter = (updateItem) => {
-        this.setState(prevState => {
-            prevState.cart.map(item => {
-                return item.bookId === updateItem.bookId ? item.quantity = updateItem.quantity : item;
-            })
-        });
-        this.handleSubtotal();
+        if(updateItem.quantity > 0) {
+            cartService.changeItem(updateItem.bookId, updateItem.quantity);
+
+            this.setState(prevState => {
+                prevState.cart.map(item => {
+                    return item.bookId === updateItem.bookId ? item.quantity = updateItem.quantity : item;
+                })
+            });
+            this.handleSubtotal();
+
+        } else if(updateItem.quantity === 0) {
+            cartService.removeItem(updateItem.bookId);
+
+            let cart = this.state.cart;
+            let newCart = cart.filter(item => item.bookId !== updateItem.bookId);
+            this.setState({ cart: newCart });
+            this.handleSubtotal();
+        }
     }
 
     componentDidMount() {
@@ -68,6 +80,7 @@ export default class CartViewPanel extends React.Component {
                         <Box key={book.bookId}>
                             <CartItem
                                 onCounter={this.handleCounter}
+                                onRemove={this.handleRemove}
                                 bookId={book.bookId}
                                 bookUrl={book.imageUrl}
                                 bookTitle={book.title}
