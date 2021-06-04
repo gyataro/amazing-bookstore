@@ -1,12 +1,8 @@
 package com.xiwenteoh.bookstore.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
@@ -15,6 +11,7 @@ import java.math.BigDecimal;
 public class Book {
     @Id
     @Column(name = "book_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String isbn;
@@ -31,7 +28,6 @@ public class Book {
     private Integer stock;
 
     @Column(name = "is_active")
-    @JSONField(serialize = false)
-    private boolean active;
+    private boolean active = true;
 }
 

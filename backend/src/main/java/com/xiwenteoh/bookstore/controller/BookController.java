@@ -1,10 +1,12 @@
 package com.xiwenteoh.bookstore.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.xiwenteoh.bookstore.entity.Book;
+import com.xiwenteoh.bookstore.dto.resource.BookResource;
+import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.dto.request.BookRequest;
 import com.xiwenteoh.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,63 +21,78 @@ public class BookController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "")
-    public String findBooks() {
-        List<Book> books = bookService.findAll();
-        return JSONArray.toJSONString(books);
+    public ResponseEntity<?> findBooks() {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        bookService.findAll()
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "")
-    public String addBook(@RequestBody BookRequest bookRequest) {
-        Book book = new Book();
-        book.setId(0);
-        book.setIsbn(bookRequest.getIsbn());
-        book.setTitle(bookRequest.getTitle());
-        book.setDescription(bookRequest.getDescription());
-        book.setAuthor(bookRequest.getAuthor());
-        book.setLanguage(bookRequest.getLanguage());
-        book.setImageUrl(bookRequest.getImageUrl());
-        book.setPrice(bookRequest.getPrice());
-        book.setStock(bookRequest.getStock());
-        book.setSales(0);
-        return JSONArray.toJSONString(bookService.save(book));
+    public ResponseEntity<?> addBook(@RequestBody BookRequest bookRequest) {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        bookService.save(bookRequest)
+                ),
+                HttpStatus.CREATED
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/{bookId}")
-    public String findBookById(@PathVariable Integer bookId) {
-        Book book = bookService.findBookById(bookId);
-        return JSONArray.toJSONString(book);
+    public ResponseEntity<?> findBookById(@PathVariable Integer bookId) {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        bookService.findBookById(bookId)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{bookId}")
-    public String updateBook(@PathVariable Integer bookId, @RequestBody BookRequest bookRequest) {
-        Book book = new Book();
-        book.setId(bookId);
-        book.setIsbn(bookRequest.getIsbn());
-        book.setTitle(bookRequest.getTitle());
-        book.setDescription(bookRequest.getDescription());
-        book.setAuthor(bookRequest.getAuthor());
-        book.setLanguage(bookRequest.getLanguage());
-        book.setImageUrl(bookRequest.getImageUrl());
-        book.setPrice(bookRequest.getPrice());
-        book.setStock(bookRequest.getStock());
-        book.setSales(bookRequest.getSales());
-        return JSONArray.toJSONString(bookService.update(book));
+    public ResponseEntity<?> updateBook(@PathVariable Integer bookId, @RequestBody BookRequest bookRequest) {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        bookService.update(bookId, bookRequest)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{bookId}")
-    public String deleteBook(@PathVariable Integer bookId) {
-        return JSONArray.toJSONString(bookService.deleteBookById(bookId));
+    public ResponseEntity<?> deleteBook(@PathVariable Integer bookId) {
+        bookService.deleteBookById(bookId);
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        null
+                ),
+                HttpStatus.NO_CONTENT
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/search")
-    public String findBookByTitle(@RequestParam("title") String bookTitle) {
-        List<Book> books = bookService.findBooksByTitleContaining(bookTitle);
-        return JSONArray.toJSONString(books);
+    public ResponseEntity<?> findBookByTitle(@RequestParam("title") String bookTitle) {
+        List<BookResource> books = bookService.findBooksByTitleContaining(bookTitle);
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        books
+                ),
+                HttpStatus.OK
+        );
     }
 
 

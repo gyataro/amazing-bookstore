@@ -8,6 +8,7 @@ import com.xiwenteoh.bookstore.entity.Cart;
 import com.xiwenteoh.bookstore.entity.Item.CartItem;
 import com.xiwenteoh.bookstore.entity.Item.OrderItem;
 import com.xiwenteoh.bookstore.entity.Order;
+import com.xiwenteoh.bookstore.exception.custom.CartNotFoundException;
 import com.xiwenteoh.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order addOrder(Long userId) {
-        Cart cart = cartDao.findByUserId(userId);
+        Cart cart = cartDao.findByUserId(userId)
+                .orElseThrow(() -> new CartNotFoundException(userId));
 
         Order order = new Order();
         List<OrderItem> orderItems = new ArrayList<>();

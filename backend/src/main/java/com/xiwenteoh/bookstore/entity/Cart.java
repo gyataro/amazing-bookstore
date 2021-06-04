@@ -15,6 +15,7 @@ import java.util.List;
 public class Cart {
     @Id
     @Column(name = "cart_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
     @Column(name = "user_id")

@@ -1,11 +1,12 @@
-package com.xiwenteoh.bookstore.dto.request;
+package com.xiwenteoh.bookstore.dto.resource;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class BookRequest {
+public class BookResource {
+    private Integer id;
     private String isbn;
     private String title;
     private String description;

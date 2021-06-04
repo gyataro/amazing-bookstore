@@ -1,12 +1,13 @@
 package com.xiwenteoh.bookstore.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.xiwenteoh.bookstore.entity.Cart;
+import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.dto.request.CartRequest;
 import com.xiwenteoh.bookstore.security.services.UserDetailsImpl;
 import com.xiwenteoh.bookstore.security.services.UserDetailsServiceImpl;
 import com.xiwenteoh.bookstore.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,49 +26,80 @@ public class CartController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "")
-    public String findCartByUser(HttpServletRequest request) {
+    public ResponseEntity<?> findCartByUser(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        Cart cart = cartService.findCartByUserId(userDetails.getId());
-        return JSONArray.toJSONString(cart);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        cartService.findCartByUserId(userDetails.getId())
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping(value = "")
-    public void deleteCart(HttpServletRequest request) {
+    public ResponseEntity<?> deleteCart(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
         cartService.deleteCart(userDetails.getId());
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        null
+                ),
+                HttpStatus.NO_CONTENT
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping(value = "/item")
-    public String addCartitem(HttpServletRequest request, @RequestBody CartRequest cartRequest) {
+    public ResponseEntity<?> addCartitem(HttpServletRequest request, @RequestBody CartRequest cartRequest) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        Cart cart = cartService.addCartItem(userDetails.getId(), cartRequest.getBookId(), cartRequest.getQuantity());
-        return JSONArray.toJSONString(cart);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        cartService.addCartItem(userDetails.getId(), cartRequest)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping(value = "/item")
-    public String updateCartitem(HttpServletRequest request, @RequestBody CartRequest cartRequest) {
+    public ResponseEntity<?> updateCartitem(HttpServletRequest request, @RequestBody CartRequest cartRequest) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        Cart cart = cartService.updateCartItem(userDetails.getId(), cartRequest.getBookId(), cartRequest.getQuantity());
-        return JSONArray.toJSONString(cart);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        cartService.updateCartItem(userDetails.getId(), cartRequest)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping(value = "/item")
-    public void deleteCartitem(HttpServletRequest request, @RequestBody CartRequest cartRequest) {
+    @DeleteMapping(value = "/item/{bookId}")
+    public ResponseEntity<?> deleteCartitem(HttpServletRequest request, @PathVariable Integer bookId) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        cartService.deleteCartItem(userDetails.getId(), cartRequest.getBookId());
+        cartService.deleteCartItem(userDetails.getId(), bookId);
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        null
+                ),
+                HttpStatus.OK
+        );
     }
 }

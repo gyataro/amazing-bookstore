@@ -3,9 +3,12 @@ package com.xiwenteoh.bookstore.service.serviceimpl;
 import com.xiwenteoh.bookstore.dao.BookDao;
 import com.xiwenteoh.bookstore.dao.CartDao;
 import com.xiwenteoh.bookstore.dao.CartItemDao;
+import com.xiwenteoh.bookstore.dto.request.CartRequest;
 import com.xiwenteoh.bookstore.entity.Book;
 import com.xiwenteoh.bookstore.entity.Cart;
 import com.xiwenteoh.bookstore.entity.Item.CartItem;
+import com.xiwenteoh.bookstore.exception.custom.BookNotFoundException;
+import com.xiwenteoh.bookstore.exception.custom.CartNotFoundException;
 import com.xiwenteoh.bookstore.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,11 @@ import java.util.List;
 @Transactional
 public class CartServiceImpl implements CartService {
 
+    /* [USAGE]: Access cart item list for POST, PUT, GET */
     @Autowired
     private CartDao cartDao;
 
+    /* [USAGE]: Directly access items for DELETE */
     @Autowired
     private CartItemDao cartItemDao;
 
@@ -28,7 +33,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart findCartByUserId(Long userId) {
-        return cartDao.findByUserId(userId);
+        return cartDao.findByUserId(userId)
+                .orElseGet(() -> createCart(userId));
     }
 
     @Override
@@ -37,61 +43,68 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addCartItem(Long userId, Integer bookId, Integer quantity) {
-        Book book = bookDao.findBookById(bookId);
-        Cart cart = cartDao.findByUserId(userId);
+    public Cart addCartItem(Long userId, CartRequest cartRequest) {
+        Book book = bookDao.findBookById(cartRequest.getBookId())
+                .orElseThrow(() -> new BookNotFoundException(cartRequest.getBookId()));
 
-        if(quantity == null || quantity <= 0 || book == null || cart == null)
-            return cart;
+        Cart cart = cartDao.findByUserId(userId)
+                .orElseGet(() -> createCart(userId));
 
         CartItem newItem = new CartItem();
         newItem.setItemId(0L);
         newItem.setCart(cart);
         newItem.setBook(book);
-        newItem.setQuantity(quantity);
+        newItem.setQuantity(cartRequest.getQuantity());
 
+        boolean isInCart = false;
         List<CartItem> cartItems = cart.getCartItems();
         for(CartItem item : cartItems) {
             if(item.getBook().getId().equals(book.getId())) {
-                newItem.setItemId(item.getItemId());
-                newItem.setQuantity(item.getQuantity() + quantity);
+                isInCart = true;
+                item.setQuantity(item.getQuantity() + cartRequest.getQuantity());
             }
         }
 
-        cartItemDao.save(newItem);
-        return cartDao.findByUserId(userId);
+        if(!isInCart) {
+            cartItems.add(newItem);
+        }
+
+        cart.setCartItems(cartItems);
+        return cartDao.save(cart);
     }
 
     @Override
-    public Cart updateCartItem(Long userId, Integer bookId, Integer quantity) {
-        Cart cart = cartDao.findByUserId(userId);
-
-        if(quantity == null || quantity <= 0 || cart == null)
-            return cart;
+    public Cart updateCartItem(Long userId, CartRequest cartRequest) {
+        Cart cart = cartDao.findByUserId(userId)
+                .orElseThrow(() -> new CartNotFoundException(userId));
 
         List<CartItem> cartItems = cart.getCartItems();
         for(CartItem item : cartItems) {
-            if(item.getBook().getId().equals(bookId)) {
-                CartItem newItem = new CartItem();
-                newItem.setItemId(item.getItemId());
-                newItem.setBook(item.getBook());
-                newItem.setCart(item.getCart());
-                newItem.setQuantity(quantity);
-                cartItemDao.save(newItem);
-                return cartDao.findByUserId(userId);
+            if(item.getBook().getId().equals(cartRequest.getBookId())) {
+                item.setQuantity(cartRequest.getQuantity());
             }
         }
 
-        return cart;
+        return cartDao.save(cart);
     }
 
     @Override
     public void deleteCartItem(Long userId, Integer bookId) {
-        Book book = bookDao.findBookById(bookId);
-        Cart cart = cartDao.findByUserId(userId);
+        Book book = bookDao.findBookById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
+
+        Cart cart = cartDao.findByUserId(userId)
+                .orElseThrow(() -> new CartNotFoundException(userId));
 
         cart.getCartItems().removeIf(cartItem -> cartItem.getBook().getId().equals(book.getId()));
 
-        cartItemDao.deleteByCart_CartIdAndBook_Id(cart.getCartId(), book.getId());
+        cartItemDao.deleteByCart_CartIdAndBook_Id(cart.getCartId(), bookId);
+    }
+
+    private Cart createCart(Long userId) {
+        Cart cart = new Cart();
+        cart.setCartId(0L);
+        cart.setUserId(userId);
+        return cartDao.save(cart);
     }
 }

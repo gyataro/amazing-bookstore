@@ -1,21 +1,20 @@
 package com.xiwenteoh.bookstore.service;
 
-import com.xiwenteoh.bookstore.entity.Book;
-import org.springframework.transaction.annotation.Transactional;
+import com.xiwenteoh.bookstore.dto.request.BookRequest;
+import com.xiwenteoh.bookstore.dto.resource.BookResource;
 
 import java.util.List;
 
 public interface BookService {
-    List<Book> findAll();
+    List<BookResource> findAll();
 
-    List<Book> findBooksByTitleContaining(String title);
+    List<BookResource> findBooksByTitleContaining(String title);
 
-    Book findBookById(Integer id);
+    BookResource findBookById(Integer bookId);
 
-    @Transactional
-    Integer deleteBookById(Integer id);
+    void deleteBookById(Integer bookId);
 
-    Book save(Book book);
+    BookResource save(BookRequest bookRequest);
 
-    Book update(Book book);
+    BookResource update(Integer bookId, BookRequest bookRequest);
 }

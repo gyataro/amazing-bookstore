@@ -1,6 +1,6 @@
 package com.xiwenteoh.bookstore.validation;
 
-import com.xiwenteoh.bookstore.validation.validator.ConfirmPasswordValidator;
+import com.xiwenteoh.bookstore.validation.validator.UniqueEmailValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -14,10 +14,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = ConfirmPasswordValidator.class)
+@Constraint(validatedBy = UniqueEmailValidator.class)
 @Documented
-public @interface ConfirmPassword {
-    String message() default "Passwords don't match";
+public @interface UniqueEmail {
+    String message() default "Email already in use";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

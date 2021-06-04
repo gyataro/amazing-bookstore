@@ -1,19 +1,19 @@
 package com.xiwenteoh.bookstore.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.xiwenteoh.bookstore.entity.Order;
+import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.security.services.UserDetailsImpl;
 import com.xiwenteoh.bookstore.security.services.UserDetailsServiceImpl;
 import com.xiwenteoh.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.Instant;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -27,27 +27,37 @@ public class OrderController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping(value = "/user")
-    public String addOrder(HttpServletRequest request) {
+    public ResponseEntity<?> addOrder(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        Order order = orderService.addOrder(userDetails.getId());
-        return JSONArray.toJSONString(order);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.addOrder(userDetails.getId())
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/user")
-    public String findOrderByUser(HttpServletRequest request) {
+    public ResponseEntity<?> findOrderByUser(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        List<Order> orders = orderService.findOrdersByUserId(userDetails.getId());
-        return JSONArray.toJSONString(orders);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findOrdersByUserId(userDetails.getId())
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/user/search")
-    public String findOrderByUserAndDate(
+    public ResponseEntity<?> findOrderByUserAndDate(
             HttpServletRequest request,
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String from,
             @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String to
@@ -58,27 +68,42 @@ public class OrderController {
         Instant after = Instant.parse(from);
         Instant before = Instant.parse(to);
 
-        List<Order> orders = orderService.findOrdersByUserIdAndTimestampBetween(userDetails.getId(), after, before);
-        return JSONArray.toJSONString(orders);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findOrdersByUserIdAndTimestampBetween(userDetails.getId(), after, before)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/admin")
-    public String findAll() {
-        List<Order> orders = orderService.findAll();
-        return JSONArray.toJSONString(orders);
+    public ResponseEntity<?> findAll() {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findAll()
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/admin/search")
-    public String findOrderByDate(
+    public ResponseEntity<?> findOrderByDate(
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String from,
             @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String to
     ) {
         Instant after = Instant.parse(from);
         Instant before = Instant.parse(to);
 
-        List<Order> orders = orderService.findOrdersByTimestampBetween(after, before);
-        return JSONArray.toJSONString(orders);
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findOrdersByTimestampBetween(after, before)
+                ),
+                HttpStatus.OK
+        );
     }
 }

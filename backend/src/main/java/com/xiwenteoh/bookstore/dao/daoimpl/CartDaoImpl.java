@@ -6,6 +6,8 @@ import com.xiwenteoh.bookstore.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class CartDaoImpl implements CartDao {
 
@@ -13,7 +15,7 @@ public class CartDaoImpl implements CartDao {
     private CartRepository cartRepository;
 
     @Override
-    public Cart findByUserId(Long userId) { return cartRepository.findCartByUserId(userId); }
+    public Optional<Cart> findByUserId(Long userId) { return cartRepository.findCartByUserId(userId); }
 
     @Override
     public Cart save(Cart cart) { return cartRepository.save(cart); }

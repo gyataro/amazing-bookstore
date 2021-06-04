@@ -1,6 +1,8 @@
 package com.xiwenteoh.bookstore.dto.request;
 
 import com.xiwenteoh.bookstore.validation.ConfirmPassword;
+import com.xiwenteoh.bookstore.validation.UniqueEmail;
+import com.xiwenteoh.bookstore.validation.UniqueUsername;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,9 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@ConfirmPassword(message = "Passwords don't match")
+@ConfirmPassword
+@UniqueUsername
+@UniqueEmail
 public class RegisterRequest {
     @NotNull
     @NotEmpty(message = "Username must not be empty")

@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b WHERE b.active = true")
@@ -15,9 +15,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findBooksByTitleContaining(String title);
 
-    Book findBookById(Integer id);
-
-    Book save(Book book);
+    Optional<Book> findBookById(Integer id);
 
     Boolean existsBookById(Integer id);
 
