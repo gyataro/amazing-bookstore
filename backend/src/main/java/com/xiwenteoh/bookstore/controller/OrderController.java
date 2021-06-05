@@ -4,26 +4,35 @@ import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.security.services.UserDetailsImpl;
 import com.xiwenteoh.bookstore.security.services.UserDetailsServiceImpl;
 import com.xiwenteoh.bookstore.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.Instant;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    public OrderController(
+            OrderService orderService,
+            UserDetailsServiceImpl userDetailsService
+    ) {
+        Objects.requireNonNull(orderService);
+        Objects.requireNonNull(userDetailsService);
+        this.orderService = orderService;
+        this.userDetailsService = userDetailsService;
+    }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping(value = "/user")
