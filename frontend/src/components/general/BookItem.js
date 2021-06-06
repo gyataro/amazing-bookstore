@@ -15,7 +15,7 @@ export default class BookItem extends React.Component {
         super(props);
         this.state = {
             bookId: (props.bookId)? props.bookId : '0',
-            bookImg: (props.bookUrl)? props.bookUrl : Placeholder,
+            bookImg: (props.bookImageUrl)? props.bookImageUrl : Placeholder,
             bookTitle: (props.bookTitle)? props.bookTitle : 'Untitled',
             bookAuthor: (props.bookAuthor)? props.bookAuthor : 'Author',
             bookPrice: (props.bookPrice)? props.bookPrice : '0.00',

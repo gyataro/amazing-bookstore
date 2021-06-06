@@ -20,7 +20,6 @@ import {
 } from "react-hook-form";
 import logo from '../assets/logo-dark.svg';
 import authCoverCSS from '../css/authcover.module.css';
-//import * as userService from "../services/userService";
 
 export default function RegisterView() {
     return (
@@ -69,7 +68,6 @@ function RegisterForm(props) {
     function onSubmit(values) {
         return new Promise(resolve => {
             setTimeout(() => {
-                //userService.register(values);
                 resolve();
             }, 1500);
         });

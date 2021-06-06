@@ -81,7 +81,7 @@ function LandingBestselling(props) {
             <Box mt={16} mx={2} key={i}>
                 <BookItem
                     bookId={props.bookList[i].id}
-                    bookUrl={props.bookList[i].image_url}
+                    bookImageUrl={props.bookList[i].imageUrl}
                     bookTitle={props.bookList[i].title}
                     bookAuthor={props.bookList[i].author}
                     bookPrice={props.bookList[i].price}

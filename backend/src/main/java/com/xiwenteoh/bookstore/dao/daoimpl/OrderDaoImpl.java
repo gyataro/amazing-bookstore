@@ -26,6 +26,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Order> findOrdersByUserIdAndTitle(Long userId, String title) {
+        return orderRepository.findOrdersByUserIdAndTitle(userId, title);
+    }
+
+    @Override
     public List<Order> findOrdersByUserIdAndTimestampBetween(Long userId, Instant after, Instant before) {
         return orderRepository.findOrdersByUserIdAndTimestampBetween(userId, after, before);
     }
@@ -33,6 +38,11 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> findOrdersByTimestampBetween(Instant after, Instant before) {
         return orderRepository.findOrdersByTimestampBetween(after, before);
+    }
+
+    @Override
+    public List<Order> findOrdersByTitle(String title) {
+        return orderRepository.findOrdersByTitle(title);
     }
 
     @Override

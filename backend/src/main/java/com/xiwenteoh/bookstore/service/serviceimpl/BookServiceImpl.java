@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class BookServiceImpl implements BookService {
 
     @Autowired
@@ -43,6 +42,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void deleteBookById(Integer id) {
         bookDao.deleteBookById(id);
     }

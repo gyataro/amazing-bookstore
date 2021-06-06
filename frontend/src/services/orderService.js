@@ -4,7 +4,12 @@ import config from "../config.json";
 
 export const orderService = {
     addOrder,
-    getOrders
+    getUserOrders,
+    searchUserOrdersByDate,
+    searchUserOrdersByTitle,
+    getOrders,
+    searchOrdersByDate,
+    searchOrdersByTitle
 };
 
 function addOrder() {
@@ -12,7 +17,31 @@ function addOrder() {
         method: 'POST',
         headers: {'Authorization': authHeader().Authorization }
     };
-    return fetch(`${config.API_URL}/order`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/order/user`, requestOptions).then(handleResponse);
+}
+
+function getUserOrders() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/order/user`, requestOptions).then(handleResponse);
+}
+
+function searchUserOrdersByDate(from, to) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/order/user/search?from=${from}&to=${to}`, requestOptions).then(handleResponse);
+}
+
+function searchUserOrdersByTitle(title) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/order/user/search?title=${title}`, requestOptions).then(handleResponse);
 }
 
 function getOrders() {
@@ -20,5 +49,21 @@ function getOrders() {
         method: 'GET',
         headers: {'Authorization': authHeader().Authorization }
     };
-    return fetch(`${config.API_URL}/order`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/order/admin`, requestOptions).then(handleResponse);
+}
+
+function searchOrdersByDate(from, to) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/order/admin/search?from=${from}&to=${to}`, requestOptions).then(handleResponse);
+}
+
+function searchOrdersByTitle(title) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/order/admin/search?title=${title}`, requestOptions).then(handleResponse);
 }

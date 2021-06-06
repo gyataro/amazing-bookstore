@@ -39,9 +39,6 @@ public class AuthServiceImpl implements AuthService {
     JwtUtils jwtUtils;
 
     @Override
-    public List<User> findAll(){ return userDao.findAll(); }
-
-    @Override
     public JwtResource register(RegisterRequest registerRequest) {
         User user = new User();
         user.setEmail(registerRequest.getEmail());

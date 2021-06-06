@@ -4,7 +4,6 @@ import config from "../config.json";
 
 export const cartService = {
     getCart,
-    getCartById,
     addItem,
     changeItem,
     removeItem
@@ -15,34 +14,28 @@ function getCart() {
     return fetch(`${config.API_URL}/cart`, requestOptions).then(handleResponse);
 }
 
-function getCartById(cartId) {
-    const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${config.API_URL}/cart/${cartId}`, requestOptions).then(handleResponse);
-}
-
 function addItem(bookId, quantity) {
     const requestOptions = {
         method: 'POST',
         headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'},
         body: JSON.stringify({ bookId, quantity })
     };
-    return fetch(`${config.API_URL}/cart/add`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/cart/item`, requestOptions).then(handleResponse);
 }
 
 function changeItem(bookId, quantity) {
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'},
         body: JSON.stringify({ bookId, quantity })
     };
-    return fetch(`${config.API_URL}/cart/change`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/cart/item`, requestOptions).then(handleResponse);
 }
 
 function removeItem(bookId) {
     const requestOptions = {
-        method: 'POST',
-        headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'},
-        body: JSON.stringify({ bookId })
+        method: 'DELETE',
+        headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'}
     };
-    return fetch(`${config.API_URL}/cart/remove`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/cart/item/${bookId}`, requestOptions).then(handleResponse);
 }

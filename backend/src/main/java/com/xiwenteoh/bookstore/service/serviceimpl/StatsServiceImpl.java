@@ -9,6 +9,7 @@ import com.xiwenteoh.bookstore.service.StatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -20,13 +21,22 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public StatResource<?> findOrderStatistics(Long userId, Instant from, Instant to) {
         List<OrderStatProjection> result = orderItemDao.findOrderStatistics(userId, from, to);
-        OrderStatProjection summary = result.remove(result.size() - 1);
 
-        return new StatResource<>(
-                result,
-                summary.getQuantity(),
-                summary.getSubtotal()
-        );
+        if(result.size() > 0) {
+            OrderStatProjection summary = result.remove(result.size() - 1);
+
+            return new StatResource<>(
+                    result,
+                    summary.getQuantity(),
+                    summary.getSubtotal()
+            );
+        } else {
+            return new StatResource<>(
+                    result,
+                    0,
+                    BigDecimal.ZERO
+            );
+        }
     }
 
     @Override

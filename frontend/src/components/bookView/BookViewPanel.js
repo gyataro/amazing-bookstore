@@ -64,7 +64,7 @@ export default class BookViewPanel extends React.Component {
                     gap={4}
                 >
                     <BookViewImage
-                        url={this.state.book.image_url}
+                        url={this.state.book.imageUrl}
                     />
 
                     <BookViewInfo

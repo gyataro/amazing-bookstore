@@ -5,8 +5,8 @@ import com.xiwenteoh.bookstore.entity.Cart;
 
 public interface CartService {
     void deleteCart(Long cartId);
-    void deleteCartItem(Long userId, Integer bookId);
     Cart findCartByUserId(Long userId);
     Cart addCartItem(Long userId, CartRequest cartRequest);
     Cart updateCartItem(Long userId, CartRequest cartRequest);
+    Cart deleteCartItem(Long userId, Integer bookId);
 }

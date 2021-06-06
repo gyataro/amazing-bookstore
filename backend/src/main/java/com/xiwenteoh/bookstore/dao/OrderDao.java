@@ -10,9 +10,13 @@ public interface OrderDao {
 
     List<Order> findOrdersByUserId(Long userId);
 
+    List<Order> findOrdersByUserIdAndTitle(Long userId, String title);
+
     List<Order> findOrdersByUserIdAndTimestampBetween(Long userId, Instant after, Instant before);
 
     List<Order> findOrdersByTimestampBetween(Instant after, Instant before);
+
+    List<Order> findOrdersByTitle(String title);
 
     Order save(Order order);
 }

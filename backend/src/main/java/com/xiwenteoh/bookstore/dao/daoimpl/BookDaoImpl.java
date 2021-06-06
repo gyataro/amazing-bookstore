@@ -27,7 +27,7 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findBooksByTitleContaining(String title) {
-        return bookRepository.findBooksByTitleContaining(title);
+        return bookRepository.findBooksByTitleContainingAndActiveTrue(title);
     }
 
     @Override

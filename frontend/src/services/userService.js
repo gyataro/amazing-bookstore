@@ -1,27 +1,24 @@
-import axios from "axios";
+import { handleResponse } from '../utils/handleResponse';
+import { authHeader } from "../utils/authHeader";
+import config from "../config.json";
 
-/*export function login(data) {
-    alert(JSON.stringify(data, null, 2));
-    axios.post("http://localhost:8080/api/auth/signin", data)
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-        })
+export const userService = {
+    getUsers,
+    banUser
 };
 
-export function register(data) {
-    //alert(JSON.stringify(data, null, 2));
-};
+function getUsers() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/users`, requestOptions).then(handleResponse);
+}
 
-export function checkSession(callback) {
-    //const url = `${config.apiUrl}/checkSession`;
-    //postRequest(url, {}, callback);
-};
-
-const checkAuth = (data) => {
-    if (data.status >= 0) {
-        this.setState({ isAuthed: true, hasAuthed: true });
-    } else {
-        this.setState({ isAuthed: false, hasAuthed: false });
-    }
-}*/
+function banUser(userId) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {'Authorization': authHeader().Authorization }
+    };
+    return fetch(`${config.API_URL}/users/${userId}`, requestOptions).then(handleResponse);
+}

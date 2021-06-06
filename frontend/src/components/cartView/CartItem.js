@@ -18,6 +18,7 @@ export default class CartItem extends React.Component {
     constructor(props) {
         super(props);
         this.handleCounter = this.handleCounter.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
         this.state = {
             bookId: (props.bookId)? props.bookId : '0',
             bookUrl: (props.bookUrl)? props.bookUrl : Placeholder,
@@ -28,8 +29,11 @@ export default class CartItem extends React.Component {
         }
     }
 
+    handleRemove() {
+        this.props.onRemove(this.state.bookId);
+    }
+
     handleCounter(newQuantity) {
-        this.setState({quantity: newQuantity});
         this.props.onCounter({"bookId": this.state.bookId, "quantity": newQuantity});
     }
 
@@ -43,7 +47,7 @@ export default class CartItem extends React.Component {
             >
                 <CartItemImage bookUrl={this.state.bookUrl}/>
 
-                <CartItemTitle onCounter={this.handleCounter} bookTitle={this.state.bookTitle}/>
+                <CartItemTitle onRemove={this.handleRemove} bookTitle={this.state.bookTitle}/>
 
                 <CartItemCounter onCounter={this.handleCounter} quantity={this.state.quantity}/>
 
@@ -96,7 +100,7 @@ function CartItemTitle(props) {
             <Text width={["100%", "85%"]} noOfLines={3} isTruncated>
                 {props.bookTitle}
             </Text>
-            <Link color={"red"} onClick={() => props.onCounter(parseInt(0))}><b>X</b> Remove</Link>
+            <Link color={"red"} onClick={() => props.onRemove()}><b>X</b> Remove</Link>
         </GridItem>
     );
 }

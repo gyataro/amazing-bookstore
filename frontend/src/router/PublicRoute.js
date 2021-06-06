@@ -11,6 +11,7 @@ import SearchView from '../views/SearchView.js';
 import UserView from '../views/UserView.js';
 import BookView from '../views/BookView.js';
 import CartView from '../views/CartView.js';
+import BookForm from "../components/adminView/manageBooks/BookForm";
 
 export default function PublicRoute() {
 
@@ -25,6 +26,8 @@ export default function PublicRoute() {
                 <PrivateRoute exact path="/user" component={UserView}/>
                 <PrivateRoute exact path="/cart" component={CartView}/>
                 <PrivateRoute exact path="/book/:id" component={BookView}/>
+                <PrivateRoute exact path="/admin/book" component={BookForm}/>
+                <PrivateRoute exact path="/admin/book/:id" component={BookForm}/>
                 <Route path="*" component={ErrorView}/>
             </Switch>
         </Router>

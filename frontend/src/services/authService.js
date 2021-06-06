@@ -20,11 +20,11 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.API_URL}/auth/signin`, requestOptions)
+    return fetch(`${config.API_URL}/auth/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             localStorage.setItem('currentUser', JSON.stringify(user));
-            currentUserSubject.next(user);
+            currentUserSubject.next(user.data);
 
             return user;
         })

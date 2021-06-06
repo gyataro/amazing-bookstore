@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b WHERE b.active = true")
     List<Book> findAll();
 
-    List<Book> findBooksByTitleContaining(String title);
+    List<Book> findBooksByTitleContainingAndActiveTrue(String title);
 
     Optional<Book> findBookById(Integer id);
 

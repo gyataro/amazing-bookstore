@@ -21,7 +21,8 @@ export default function Search() {
     function onSubmit(values) {
         return new Promise(resolve => {
             setTimeout(() => {
-                history.push("/search?query=" + String(values.query));
+                history.push("/search?title=" + String(values.query));
+                window.location.reload(true);
                 resolve();
             }, 100);
         });

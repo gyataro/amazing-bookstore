@@ -125,6 +125,11 @@ function hasUser(user) {
                 </MenuButton>
                 <MenuList color={"black"}>
                     <MenuGroup title="Profile">
+                        {
+                            (authenticationService.currentUserValue.roles.indexOf("ROLE_ADMIN") !== -1)?
+                                <MenuItem onClick={() => history.push('/admin')}>Control Panel</MenuItem> :
+                                null
+                        }
                         <MenuItem onClick={() => history.push('/user')}>My Orders</MenuItem>
                         <MenuItem onClick={() => {authenticationService.logout(); history.push('/login')}}>Logout</MenuItem>
                     </MenuGroup>

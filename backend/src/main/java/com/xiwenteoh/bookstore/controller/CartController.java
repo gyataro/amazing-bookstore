@@ -92,12 +92,10 @@ public class CartController {
         Principal principal = request.getUserPrincipal();
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
-        cartService.deleteCartItem(userDetails.getId(), bookId);
-
         return new ResponseEntity<>(
                 new Response<>(
                         Response.StatusType.success,
-                        null
+                        cartService.deleteCartItem(userDetails.getId(), bookId)
                 ),
                 HttpStatus.OK
         );

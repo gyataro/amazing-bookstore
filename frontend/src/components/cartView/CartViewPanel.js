@@ -21,7 +21,7 @@ export default class CartViewPanel extends React.Component {
     constructor(props) {
         super(props);
         this.handleCounter = this.handleCounter.bind(this);
-        this.handleSubtotal = this.handleSubtotal.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
         this.state = {
             subtotal: 0.00,
             shipping: 0.00,
@@ -30,42 +30,30 @@ export default class CartViewPanel extends React.Component {
         };
     };
 
-    handleSubtotal = () => {
-        this.setState(prevState => {
-           return {
-               ...prevState,
-               subtotal: prevState.cart.reduce((sum, item) => (
-                   sum += item.price * item.quantity
-               ), 0)
-           }
-        });
+    handleCounter = (updateItem) => {
+        cartService.changeItem(updateItem.bookId, updateItem.quantity).then(cart => {
+            this.setState({
+                cart: cart.cartItems,
+                subtotal: cart.total
+            });
+        })
     }
 
-    handleCounter = (updateItem) => {
-        if(updateItem.quantity > 0) {
-            cartService.changeItem(updateItem.bookId, updateItem.quantity);
-
-            this.setState(prevState => {
-                prevState.cart.map(item => {
-                    return item.bookId === updateItem.bookId ? item.quantity = updateItem.quantity : item;
-                })
+    handleRemove = (bookId) => {
+        cartService.removeItem(bookId).then(cart => {
+            this.setState({
+                cart: cart.cartItems,
+                subtotal: cart.total
             });
-            this.handleSubtotal();
-
-        } else if(updateItem.quantity === 0) {
-            cartService.removeItem(updateItem.bookId);
-
-            let cart = this.state.cart;
-            let newCart = cart.filter(item => item.bookId !== updateItem.bookId);
-            this.setState({ cart: newCart });
-            this.handleSubtotal();
-        }
+        })
     }
 
     componentDidMount() {
         cartService.getCart().then(cart => {
-            this.setState({ cart: cart });
-            this.handleSubtotal();
+            this.setState({
+                cart: cart.cartItems,
+                subtotal: cart.total
+            });
         });
     }
 
@@ -76,16 +64,16 @@ export default class CartViewPanel extends React.Component {
                 direction={{ base: "column-reverse", md: "row" }}
             >
                 <Box flex={6} mt={["48px", "0px"]}>
-                    { this.state.cart.map(book =>
-                        <Box key={book.bookId}>
+                    { this.state.cart.map(cartItem =>
+                        <Box key={cartItem.itemId}>
                             <CartItem
                                 onCounter={this.handleCounter}
                                 onRemove={this.handleRemove}
-                                bookId={book.bookId}
-                                bookUrl={book.imageUrl}
-                                bookTitle={book.title}
-                                bookPrice={book.price}
-                                quantity={book.quantity}
+                                bookId={cartItem.book.id}
+                                bookUrl={cartItem.book.imageUrl}
+                                bookTitle={cartItem.book.title}
+                                bookPrice={cartItem.book.price}
+                                quantity={cartItem.quantity}
                             />
                             <Divider mb={["10px", "28px"]} mt={"10px"} />
                         </Box>

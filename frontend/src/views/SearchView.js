@@ -18,7 +18,6 @@ import { authenticationService } from "../services/authService";
 export default class SearchView extends React.Component {
     constructor(props) {
         super(props);
-        //this.updateList = this.updateList.bind(this);
         this.state = {
             currentUser: authenticationService.currentUserValue,
             bookList: [],
@@ -28,52 +27,14 @@ export default class SearchView extends React.Component {
     }
 
     componentDidMount() {
-        bookService.getBooks().then(books => this.setState({ bookList: books }));
-    }
-
-    /*updateList(search) {
-        let tempList = [];
-        const filterText = (search.query == null || search.query.length <= 0)? "" : search.query;
-
-        this.setState({query: search.query});
-        if(search.query == null || search.query.length <= 0) {
-            this.setState({isDefault: true});
+        const urlParams = new URLSearchParams(window.location.search);
+        const titleParam = urlParams.get('title');
+        if(titleParam) {
+            bookService.searchByTitle(titleParam).then(books => this.setState({ bookList: books }));
         } else {
-            this.setState({isDefault: false});
+            bookService.getBooks().then(books => this.setState({ bookList: books }));
         }
-
-        BOOKLIST.forEach((book, index) => {
-            if(book.bookTitle.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
-                tempList.push(
-                    <Box mt={16} mx={2} key={index}>
-                        <BookItem
-                            bookId={book.bookId}
-                            bookUrl={book.bookImg}
-                            bookTitle={book.bookTitle}
-                            bookAuthor={book.bookAuthor}
-                            bookPrice={book.bookPrice}
-                        />
-                    </Box>
-                )
-            }
-        });
-
-        this.setState({bookList: tempList});
     }
-
-    componentDidMount = () => {
-        const search = queryString.parse(this.props.location.search);
-        this.updateList(search);
-    }
-
-    componentDidUpdate(prevProps) {
-        const currSearch = queryString.parse(this.props.location.search);
-        const prevSearch = queryString.parse(prevProps.location.search);
-
-        if (prevSearch.query !== currSearch.query){
-            this.updateList(currSearch);
-        }
-    }*/
 
     render() {
         return (
@@ -110,7 +71,7 @@ export default class SearchView extends React.Component {
                             <Box mt={16} mx={2} key={book.id}>
                                 <BookItem
                                 bookId={book.id}
-                                bookUrl={book.image_url}
+                                bookImageUrl={book.imageUrl}
                                 bookTitle={book.title}
                                 bookAuthor={book.author}
                                 bookPrice={book.price}

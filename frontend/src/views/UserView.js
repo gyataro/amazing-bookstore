@@ -11,28 +11,19 @@ import {
     TabPanels
 } from "@chakra-ui/react";
 import { IoPersonCircleOutline } from 'react-icons/io5';
-import { FaTag, FaChartLine } from 'react-icons/fa'
+import { FaChartLine, FaCashRegister } from 'react-icons/fa'
 import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
-import UserOrderPanel from "../components/userView/UserOrderPanel"
-import UserStatPanel from "../components/userView/UserStatPanel"
+import UserOrderTable from "../components/userView/myOrders/UserOrderTable";
+import UserStatsTable from "../components/userView/myStats/UserStatsTable";
 import { authenticationService } from "../services/authService";
-import { orderService } from "../services/orderService";
 
 export default class UserPage extends React.Component {
     constructor(props) {
         super(props);
-        //this.handleOrders = this.handleOrders.bind(this);
         this.state = {
-            isLoggedIn: typeof authenticationService.currentUserValue != "undefined",
-            orderList: []
+            isLoggedIn: typeof authenticationService.currentUserValue != "undefined"
         }
-    }
-
-    componentDidMount() {
-        orderService.getOrders().then(orders => {
-            this.setState({ orderList: orders });
-        });
     }
 
     render() {
@@ -46,39 +37,31 @@ export default class UserPage extends React.Component {
                 m={"0 auto"}
             >
                 <Header />
-                <Box
-                    mt={{ base: "120px", md: "20px", xl: "20px"}}
-                    mb={{ base: "48px", md: "48px", xl: "48px"}}
-                    minH={"75vh"}
-                    w={"100%"}
-                    align={"center"}
+
+                <UserHero user={authenticationService.currentUserValue} isLoggedIn={this.state.isLoggedIn} />
+
+                <Tabs
+                    isLazy
+                    mt={"48px"}
+                    mb={"48px"}
+                    w={"80%"}
+                    variant="enclosed-colored"
+                    colorScheme="facebook"
+                    minH={"60vh"}
                 >
-
-                    <UserHero isLoggedIn={this.state.isLoggedIn} user={authenticationService.currentUserValue} />
-
-                    <Tabs
-                        mt={"48px"}
-                        w={"80%"}
-                        variant="enclosed-colored"
-                        colorScheme="facebook"
-                        minH={"60vh"}
-                        isLazy={"true"}
-
-                    >
-                        <TabList>
-                            <Tab w={{ base: "100%" }}><FaTag fontSize={"18px"}/>&nbsp;My Orders</Tab>
-                            <Tab w={{ base: "100%" }}><FaChartLine fontSize={"18px"}/>&nbsp;Statistics</Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel>
-                                <UserOrderPanel orderList={this.state.orderList}/>
-                            </TabPanel>
-                            <TabPanel>
-                                <UserStatPanel />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
-                </Box>
+                    <TabList overflow={"scroll"}>
+                        <Tab><FaCashRegister fontSize={"18px"}/>&nbsp;My Orders</Tab>
+                        <Tab><FaChartLine fontSize={"18px"}/>&nbsp;Statistics</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <UserOrderTable />
+                        </TabPanel>
+                        <TabPanel>
+                            <UserStatsTable />
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
 
                 <Footer />
             </Flex>

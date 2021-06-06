@@ -45,6 +45,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findOrdersByUserIdAndTitle(Long userId, String title) {
+        return orderDao.findOrdersByUserIdAndTitle(userId, title);
+    }
+
+    @Override
     public List<Order> findOrdersByUserIdAndTimestampBetween(Long userId, Instant after, Instant before) {
         return orderDao.findOrdersByUserIdAndTimestampBetween(userId, after, before);
     }
@@ -52,6 +57,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findOrdersByTimestampBetween(Instant after, Instant before) {
         return orderDao.findOrdersByTimestampBetween(after, before);
+    }
+
+    @Override
+    public List<Order> findOrdersByTitle(String title) {
+        return orderDao.findOrdersByTitle(title);
     }
 
     @Override

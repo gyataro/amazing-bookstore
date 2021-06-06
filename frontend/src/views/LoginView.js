@@ -20,18 +20,15 @@ import {
 import {
     useForm
 } from "react-hook-form";
-import { useLocation, useHistory } from "react-router-dom";
 import authCoverCSS from "../css/authcover.module.css";
 import logo from '../assets/logo-dark.svg';
-
 import { authenticationService } from "../services/authService";
 import { history } from "../utils/history";
 
 class LoginView extends React.Component {
     constructor(props) {
         super();
-
-        // redirect to home if already logged in
+        // redirect if already logged in
         if (authenticationService.currentUserValue) {
             history.push('/');
         }
@@ -81,25 +78,16 @@ function LoginHeader(props) {
 function LoginForm(props) {
     // Functions to link form input with submission
     const { handleSubmit, errors, register, formState } = useForm();
-    const location = useLocation();
-    const history = useHistory();
 
     function onSubmit(values) {
         return new Promise(resolve => {
-            setTimeout(() => {
-                //userService.login(values);
-                authenticationService.login(values.username, values.password)
-                    .then(
-                        user => {
-                            const { from } = location.state || { from: { pathname: "/" }};
-                            history.push(from);
-                        },
-                        error => {
+            authenticationService.login(values.username, values.password)
+                .then(user => {
+                    window.location.reload(true);
+                    resolve();
+                }, error => {
 
-                        }
-                    )
-                resolve();
-            }, 1500);
+                });
         });
     }
 

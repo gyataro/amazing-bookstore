@@ -4,12 +4,10 @@ import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.security.services.UserDetailsImpl;
 import com.xiwenteoh.bookstore.security.services.UserDetailsServiceImpl;
 import com.xiwenteoh.bookstore.service.OrderService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +63,25 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping(value = "/user/search")
+    @GetMapping(value = "/user/search", params = "title")
+    public ResponseEntity<?> findOrderByUserAndTitle(
+            HttpServletRequest request,
+            @RequestParam("title") String title
+    ) {
+        Principal principal = request.getUserPrincipal();
+        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(principal.getName());
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findOrdersByUserIdAndTitle(userDetails.getId(), title)
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/user/search", params = {"from", "to"})
     public ResponseEntity<?> findOrderByUserAndDate(
             HttpServletRequest request,
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String from,
@@ -99,7 +115,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = "/admin/search")
+    @GetMapping(value = "/admin/search", params = {"from", "to"})
     public ResponseEntity<?> findOrderByDate(
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String from,
             @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String to
@@ -111,6 +127,18 @@ public class OrderController {
                 new Response<>(
                         Response.StatusType.success,
                         orderService.findOrdersByTimestampBetween(after, before)
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = "/admin/search", params = "title")
+    public ResponseEntity<?> findOrderByTitle(@RequestParam("title") String title) {
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.success,
+                        orderService.findOrdersByTitle(title)
                 ),
                 HttpStatus.OK
         );

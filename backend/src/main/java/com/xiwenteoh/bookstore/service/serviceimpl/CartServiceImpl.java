@@ -89,7 +89,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCartItem(Long userId, Integer bookId) {
+    public Cart deleteCartItem(Long userId, Integer bookId) {
         Book book = bookDao.findBookById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
 
@@ -99,6 +99,7 @@ public class CartServiceImpl implements CartService {
         cart.getCartItems().removeIf(cartItem -> cartItem.getBook().getId().equals(book.getId()));
 
         cartItemDao.deleteByCart_CartIdAndBook_Id(cart.getCartId(), bookId);
+        return cart;
     }
 
     private Cart createCart(Long userId) {

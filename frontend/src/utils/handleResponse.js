@@ -4,8 +4,7 @@ import { history } from "./history";
 export function handleResponse(response) {
 
     return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        console.log(data);
+        const responseData = text && JSON.parse(text);
         if (!response.ok) {
             if ([401, 403].indexOf(response.status) !== -1) {
                 alert("You don't have permission!");
@@ -18,10 +17,11 @@ export function handleResponse(response) {
                 history.push('/error');
             }
 
-            const error = (data && data.message) || response.statusText;
+            const error = (responseData && responseData.message) || response.statusText;
             return Promise.reject(error);
         }
 
-        return data;
+        console.log(responseData.data);
+        return responseData.data;
     });
 }
