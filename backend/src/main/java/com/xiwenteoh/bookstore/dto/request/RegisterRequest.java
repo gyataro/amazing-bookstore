@@ -13,11 +13,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ConfirmPassword
-@UniqueUsername
-@UniqueEmail
 public class RegisterRequest {
     @NotNull
     @NotEmpty(message = "Username must not be empty")
+    @UniqueUsername
     private String username;
 
     @NotNull
@@ -28,5 +27,6 @@ public class RegisterRequest {
     @NotNull
     @NotEmpty
     @Email(message = "Email format is not valid")
+    @UniqueEmail
     private String email;
 }

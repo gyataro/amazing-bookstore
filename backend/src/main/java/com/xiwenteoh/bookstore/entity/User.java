@@ -24,8 +24,7 @@ public class User {
     private String password;
 
     @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             name = "user_role",

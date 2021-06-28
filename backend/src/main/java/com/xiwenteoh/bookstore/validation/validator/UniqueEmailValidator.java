@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Object> {
+public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
     @Autowired
     UserRepository userRepository;
@@ -19,8 +19,7 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Ob
     public void initialize(UniqueEmail constraintAnnotation) {
     }
     @Override
-    public boolean isValid(Object obj, ConstraintValidatorContext context){
-        RegisterRequest user = (RegisterRequest) obj;
-        return !userRepository.existsByEmail(user.getEmail());
+    public boolean isValid(String email, ConstraintValidatorContext context){
+        return !userRepository.existsByEmail(email);
     }
 }

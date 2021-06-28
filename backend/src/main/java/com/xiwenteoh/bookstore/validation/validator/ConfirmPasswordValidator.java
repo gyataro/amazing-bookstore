@@ -16,6 +16,15 @@ public class ConfirmPasswordValidator implements ConstraintValidator<ConfirmPass
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
         RegisterRequest user = (RegisterRequest) obj;
-        return user.getPassword().equals(user.getConfirmPassword());
+        if(user.getPassword().equals(user.getConfirmPassword())) {
+            return true;
+        } else {
+            context.disableDefaultConstraintViolation();
+            context
+                .buildConstraintViolationWithTemplate("Passwords don't match")
+                .addPropertyNode("confirmPassword")
+                .addConstraintViolation();
+            return false;
+        }
     }
 }

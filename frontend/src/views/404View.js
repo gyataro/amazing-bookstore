@@ -11,7 +11,7 @@ import {
 } from 'react-router-dom';
 import Header from "../components/general/Header";
 
-export default function ErrorView() {
+export default function NotFoundView() {
     return (
         <Flex
             display={"flex"}

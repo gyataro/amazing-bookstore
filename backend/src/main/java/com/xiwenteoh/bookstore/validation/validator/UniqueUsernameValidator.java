@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, Object> {
+public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
     UserRepository userRepository;
@@ -19,8 +19,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     public void initialize(UniqueUsername constraintAnnotation) {
     }
     @Override
-    public boolean isValid(Object obj, ConstraintValidatorContext context){
-        RegisterRequest user = (RegisterRequest) obj;
-        return !userRepository.existsByUsername(user.getUsername());
+    public boolean isValid(String username, ConstraintValidatorContext context){
+        return !userRepository.existsByUsername(username);
     }
 }

@@ -77,17 +77,24 @@ function LoginHeader(props) {
 
 function LoginForm(props) {
     // Functions to link form input with submission
-    const { handleSubmit, errors, register, formState } = useForm();
+    const { handleSubmit, setError, errors, register, formState } = useForm();
 
     function onSubmit(values) {
         return new Promise(resolve => {
             authenticationService.login(values.username, values.password)
                 .then(user => {
                     window.location.reload(true);
-                    resolve();
-                }, error => {
-
+                }, e => {
+                    setError("username", {
+                        type: "server",
+                        message: ""
+                    });
+                    setError("password", {
+                        type: "server",
+                        message: e.errors[0].message
+                    });
                 });
+            resolve();
         });
     }
 
@@ -95,25 +102,24 @@ function LoginForm(props) {
         <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={4}>
-                    <FormControl id="username">
+                    <FormControl id="username" isInvalid={errors.username}>
                         <FormLabel>Username</FormLabel>
                         <Input
                             name="username"
                             type="username"
                             ref={register()} // Link to onSubmit()
                         />
+                        <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
                     </FormControl>
-                    <FormControl id="password">
+                    <FormControl id="password" isInvalid={errors.password}>
                         <FormLabel>Password</FormLabel>
                         <Input
                             name="password"
                             type="password"
                             ref={register()} // Link to onSubmit()
                         />
+                        <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
                     </FormControl>
-                    <FormErrorMessage>
-                        {errors.name && errors.name.message}
-                    </FormErrorMessage>
                     <Stack spacing={10}>
                         <Stack
                             direction={{ base: 'column', sm: 'row' }}

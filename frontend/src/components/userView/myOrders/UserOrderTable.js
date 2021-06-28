@@ -63,9 +63,9 @@ const UserOrderTable = () => {
                         <Tbody>
                             {props.value.map(item => (
                                 <Tr key={item.itemId}>
-                                    <Th>{item.book.title}</Th>
-                                    <Th>{item.quantity}</Th>
-                                    <Th>${item.subtotal}</Th>
+                                    <Th width={"70%"}>{item.book.title}</Th>
+                                    <Th width={"10%"}>{item.quantity}</Th>
+                                    <Th width={"20%"}>${item.subtotal}</Th>
                                 </Tr>
                             ))}
                         </Tbody>

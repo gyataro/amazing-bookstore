@@ -5,13 +5,15 @@ import { history } from "../utils/history";
 import LandingView from '../views/LandingView.js';
 import LoginView from '../views/LoginView.js';
 import RegisterView from '../views/RegisterView.js';
-import ErrorView from '../views/ErrorView.js';
 import AdminView from '../views/AdminView.js';
 import SearchView from '../views/SearchView.js';
 import UserView from '../views/UserView.js';
 import BookView from '../views/BookView.js';
 import CartView from '../views/CartView.js';
 import BookForm from "../components/adminView/manageBooks/BookForm";
+
+import NotFoundView from '../views/404View.js';
+import ForbiddenView from "../views/403View";
 
 export default function PublicRoute() {
 
@@ -28,7 +30,8 @@ export default function PublicRoute() {
                 <PrivateRoute exact path="/book/:id" component={BookView}/>
                 <PrivateRoute exact path="/admin/book" component={BookForm}/>
                 <PrivateRoute exact path="/admin/book/:id" component={BookForm}/>
-                <Route path="*" component={ErrorView}/>
+                <Route path="/403" component={ForbiddenView} />
+                <Route path="*" component={NotFoundView} />
             </Switch>
         </Router>
     );
