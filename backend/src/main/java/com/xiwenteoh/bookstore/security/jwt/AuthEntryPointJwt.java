@@ -42,7 +42,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             errorDetail.setMessage("Account suspended, please contact support");
         }
         else {
-            errorDetail.setMessage("Something went wrong, please contact support");
+            errorDetail.setMessage("Unauthenticated");
         }
 
         List<ErrorResource.ErrorDetail> errorDetails = Collections.singletonList(errorDetail);

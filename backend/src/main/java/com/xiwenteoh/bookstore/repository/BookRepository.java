@@ -1,6 +1,7 @@
 package com.xiwenteoh.bookstore.repository;
 
 import com.xiwenteoh.bookstore.entity.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b WHERE b.active = true")
     List<Book> findAll();
 
-    List<Book> findBooksByTitleContainingAndActiveTrue(String title);
+    List<Book> findBooksByTitleContainingAndActiveTrue(String title, Pageable pageable);
 
     Optional<Book> findBookById(Integer id);
 

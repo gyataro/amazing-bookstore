@@ -25,7 +25,7 @@ export default class LandingView extends React.Component {
     }
 
     componentDidMount() {
-        bookService.getBooks().then(books => this.setState({ bookList: books }));
+        bookService.searchByTitle("", 0, 7).then(books => this.setState({ bookList: books }));
     }
 
     render() {
@@ -107,7 +107,7 @@ function LandingBestselling(props) {
                 {listItems}
             </SimpleGrid>
             <Box pt={"28px"} w={"100%"}>
-                <Link to={'/search?q=all'}>
+                <Link to={'/search?title='}>
                     <Button
                         variant={"outline"}
                         borderWidth={"2px"}

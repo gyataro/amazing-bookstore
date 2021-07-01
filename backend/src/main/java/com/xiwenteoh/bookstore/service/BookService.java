@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookService {
     List<BookResource> findAll();
 
-    List<BookResource> findBooksByTitleContaining(String title);
+    List<BookResource> findBooksByTitleContaining(String title, Integer page, Integer size);
 
     BookResource findBookById(Integer bookId);
 

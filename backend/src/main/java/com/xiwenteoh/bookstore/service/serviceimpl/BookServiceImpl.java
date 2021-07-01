@@ -27,9 +27,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResource> findBooksByTitleContaining(String title) {
+    public List<BookResource> findBooksByTitleContaining(String title, Integer page, Integer size) {
         return BookMapper.INSTANCE.bookToBookResource(
-                bookDao.findBooksByTitleContaining(title)
+                bookDao.findBooksByTitleContaining(title, page, size)
         );
     }
 

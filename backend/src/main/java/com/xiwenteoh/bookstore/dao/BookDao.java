@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface BookDao {
     List<Book> findAll();
 
-    List<Book> findBooksByTitleContaining(String title);
+    List<Book> findBooksByTitleContaining(String title, Integer page, Integer size);
 
     Optional<Book> findBookById(Integer id);
 

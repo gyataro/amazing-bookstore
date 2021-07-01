@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/api/book")
 public class BookController {
@@ -83,17 +81,17 @@ public class BookController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/search")
-    public ResponseEntity<?> findBookByTitle(@RequestParam("title") String bookTitle) {
-        List<BookResource> books = bookService.findBooksByTitleContaining(bookTitle);
-
+    public ResponseEntity<?> findBookByTitle(
+            @RequestParam("title") String bookTitle,
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ) {
         return new ResponseEntity<>(
                 new Response<>(
                         Response.StatusType.success,
-                        books
+                        bookService.findBooksByTitleContaining(bookTitle, page, size)
                 ),
                 HttpStatus.OK
         );
     }
-
-
 }

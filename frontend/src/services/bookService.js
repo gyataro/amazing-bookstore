@@ -44,7 +44,7 @@ function deleteBook(bookId) {
     return fetch(`${config.API_URL}/book/${bookId}`, requestOptions).then(handleResponse);
 }
 
-function searchByTitle(title) {
+function searchByTitle(title, page, size) {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${config.API_URL}/book/search?title=${title}`, requestOptions).then(handleResponse);
+    return fetch(`${config.API_URL}/book/search?title=${title}&page=${page}&size=${size}`, requestOptions).then(handleResponse);
 }
