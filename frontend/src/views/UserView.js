@@ -11,12 +11,13 @@ import {
     TabPanels
 } from "@chakra-ui/react";
 import { IoPersonCircleOutline } from 'react-icons/io5';
-import { FaChartLine, FaCashRegister } from 'react-icons/fa'
+import { FaChartLine, FaCashRegister } from 'react-icons/fa';
+import { authenticationService } from "../services/authService";
+import hiddenScrollbarCSS from "../css/scroll.module.css";
 import Header from "../components/general/Header"
 import Footer from "../components/general/Footer"
 import UserOrderTable from "../components/userView/myOrders/UserOrderTable";
 import UserStatsTable from "../components/userView/myStats/UserStatsTable";
-import { authenticationService } from "../services/authService";
 
 export default class UserPage extends React.Component {
     constructor(props) {
@@ -49,7 +50,7 @@ export default class UserPage extends React.Component {
                     colorScheme="facebook"
                     minH={"60vh"}
                 >
-                    <TabList overflow={"scroll"}>
+                    <TabList overflow={"scroll"} className={hiddenScrollbarCSS.hidden_scrollbar}>
                         <Tab><FaCashRegister fontSize={"18px"}/>&nbsp;My Orders</Tab>
                         <Tab><FaChartLine fontSize={"18px"}/>&nbsp;Statistics</Tab>
                     </TabList>

@@ -10,15 +10,17 @@ import {
     TabPanels,
     TabPanel,
 } from "@chakra-ui/react";
-import Header from "../components/general/Header";
-import Footer from "../components/general/Footer";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaCashRegister, FaBoxes, FaUserCog, FaChartLine } from 'react-icons/fa';
+import hiddenScrollbarCSS from "../css/scroll.module.css";
+import Header from "../components/general/Header";
+import Footer from "../components/general/Footer";
 import BookTable from "../components/adminView/manageBooks/BookTable";
 import UserTable from "../components/adminView/manageUsers/UserTable";
 import OrderTable from "../components/adminView/manageOrders/OrderTable";
 import UsersStatsTable from "../components/adminView/manageStats/UsersStatsTable";
 import SalesStatsTable from "../components/adminView/manageStats/SalesStatsTable";
+import bookCardCSS from "../css/bookcard.module.css";
 
 export default class AdminView extends React.Component {
     constructor(props) {
@@ -62,7 +64,7 @@ export default class AdminView extends React.Component {
                     colorScheme="facebook"
                     minH={"60vh"}
                 >
-                    <TabList overflow={"scroll"}>
+                    <TabList overflow={"scroll"} className={hiddenScrollbarCSS.hidden_scrollbar}>
                         <Tab><FaCashRegister fontSize={"18px"}/>&nbsp;Manage Orders</Tab>
                         <Tab><FaBoxes fontSize={"18px"}/>&nbsp;Manage Books</Tab>
                         <Tab><FaUserCog fontSize={"18px"}/>&nbsp;Manage Users</Tab>
