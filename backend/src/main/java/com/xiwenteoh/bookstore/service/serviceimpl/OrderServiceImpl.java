@@ -3,7 +3,6 @@ package com.xiwenteoh.bookstore.service.serviceimpl;
 import com.xiwenteoh.bookstore.dao.CartDao;
 import com.xiwenteoh.bookstore.dao.CartItemDao;
 import com.xiwenteoh.bookstore.dao.OrderDao;
-import com.xiwenteoh.bookstore.dao.OrderItemDao;
 import com.xiwenteoh.bookstore.entity.Cart;
 import com.xiwenteoh.bookstore.entity.Item.CartItem;
 import com.xiwenteoh.bookstore.entity.Item.OrderItem;
@@ -24,9 +23,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
-
-    @Autowired
-    private OrderItemDao orderItemDao;
 
     @Autowired
     private CartDao cartDao;

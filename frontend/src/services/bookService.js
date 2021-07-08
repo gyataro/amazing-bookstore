@@ -22,19 +22,34 @@ function getBook(bookId) {
 }
 
 function createBook(book) {
+    const formData = new FormData();
+    Object.keys(book).forEach(
+        key => (key === "image")? formData.append(key, book[key][0]) : formData.append(key, book[key])
+    );
+
     const requestOptions = {
         method: 'POST',
-        headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'},
-        body: JSON.stringify(book)
+        headers: { 'Authorization': authHeader().Authorization },
+        body: formData
     };
     return fetch(`${config.API_URL}/book`, requestOptions).then(handleResponse);
 }
 
 function updateBook(book, bookId) {
+    console.log(book);
+    const formData = new FormData();
+    Object.keys(book).forEach(
+        key => (key === "image")? null : formData.append(key, book[key])
+    );
+
+    if(book["image"].length > 0) {
+        formData.append("image", book["image"][0])
+    }
+
     const requestOptions = {
         method: 'PUT',
-        headers: {'Authorization': authHeader().Authorization, 'Content-Type': 'application/json'},
-        body: JSON.stringify(book)
+        headers: {'Authorization': authHeader().Authorization },
+        body: formData
     };
     return fetch(`${config.API_URL}/book/${bookId}`, requestOptions).then(handleResponse);
 }

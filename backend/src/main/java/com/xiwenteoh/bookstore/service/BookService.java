@@ -3,6 +3,7 @@ package com.xiwenteoh.bookstore.service;
 import com.xiwenteoh.bookstore.dto.request.BookRequest;
 import com.xiwenteoh.bookstore.dto.resource.BookResource;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BookService {
@@ -14,7 +15,7 @@ public interface BookService {
 
     void deleteBookById(Integer bookId);
 
-    BookResource save(BookRequest bookRequest);
+    BookResource save(BookRequest bookRequest) throws IOException;
 
-    BookResource update(Integer bookId, BookRequest bookRequest);
+    BookResource update(Integer bookId, BookRequest bookRequest) throws IOException;
 }

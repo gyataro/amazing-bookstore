@@ -80,6 +80,7 @@ const Form = (props) => {
                     resolve();
                 })
             } else {
+                console.log(values);
                 bookService.createBook(values).then(book => {
                     alert("Success!");
                     history.push("/admin");
@@ -118,8 +119,8 @@ const Form = (props) => {
             </FormControl>
 
             <FormControl>
-                <FormLabel>Image URL</FormLabel>
-                <Input name="imageUrl" ref={register} />
+                <FormLabel>Book Image</FormLabel>
+                <Input type="file" accept="image/*" name="image" ref={register} />
             </FormControl>
 
             <FormControl>

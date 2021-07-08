@@ -1,6 +1,5 @@
 package com.xiwenteoh.bookstore.controller;
 
-import com.xiwenteoh.bookstore.dto.resource.BookResource;
 import com.xiwenteoh.bookstore.dto.response.Response;
 import com.xiwenteoh.bookstore.dto.request.BookRequest;
 import com.xiwenteoh.bookstore.service.BookService;
@@ -9,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/api/book")
@@ -31,7 +32,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "")
-    public ResponseEntity<?> addBook(@RequestBody BookRequest bookRequest) {
+    public ResponseEntity<?> addBook(@ModelAttribute BookRequest bookRequest) throws IOException {
         return new ResponseEntity<>(
                 new Response<>(
                         Response.StatusType.success,
@@ -55,7 +56,10 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{bookId}")
-    public ResponseEntity<?> updateBook(@PathVariable Integer bookId, @RequestBody BookRequest bookRequest) {
+    public ResponseEntity<?> updateBook(
+            @PathVariable Integer bookId,
+            @ModelAttribute BookRequest bookRequest
+    ) throws IOException {
         return new ResponseEntity<>(
                 new Response<>(
                         Response.StatusType.success,

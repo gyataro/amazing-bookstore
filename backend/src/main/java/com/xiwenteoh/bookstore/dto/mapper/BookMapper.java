@@ -21,6 +21,7 @@ public interface BookMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
     Book bookRequestToBook(BookRequest bookRequest);
 
     @Mapping(target = "active", ignore = true)

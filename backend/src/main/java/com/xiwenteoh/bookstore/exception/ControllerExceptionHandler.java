@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -133,6 +134,31 @@ public class ControllerExceptionHandler {
                         errorResponse
                 ),
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    /* [HANDLES]: IO exception in image read / write */
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<?> handleIOException(
+            IOException exception
+    ) {
+        ErrorResource.ErrorDetail errorDetail = new ErrorResource.ErrorDetail();
+        errorDetail.setField("image");
+        errorDetail.setMessage(exception.getMessage());
+
+        List<ErrorResource.ErrorDetail> errorDetails = Collections.singletonList(errorDetail);
+
+        ErrorResource errorResponse = new ErrorResource();
+        errorResponse.setErrors(errorDetails);
+
+        return new ResponseEntity<>(
+                new Response<>(
+                        Response.StatusType.fail,
+                        errorResponse
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 }

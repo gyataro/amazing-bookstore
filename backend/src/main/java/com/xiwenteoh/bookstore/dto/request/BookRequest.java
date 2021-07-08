@@ -1,6 +1,7 @@
 package com.xiwenteoh.bookstore.dto.request;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -10,7 +11,7 @@ public class BookRequest {
     private String title;
     private String description;
     private String author;
-    private String imageUrl;
+    private MultipartFile image;
     private String language;
     private BigDecimal price;
     private Integer stock;
