@@ -93,14 +93,33 @@ public class BookServiceImpl implements BookService {
 
         /* Update book image */
         MultipartFile file = bookRequest.getImage();
-        if(file != null && !file.isEmpty()) {
-            String[] urlComponents = book.getImageUrl().split("/");
-            String bookImageId = urlComponents[urlComponents.length - 1];
 
-            BookImage bookImage = bookImageDao.findBookImageById(bookImageId);
-            bookImage.setData(file.getBytes());
-            bookImage.setType(file.getContentType());
-            bookImageDao.save(bookImage);
+        /* If there is an uploaded image */
+        if(file != null && !file.isEmpty()) {
+
+            /* If the book already has an existing image in database (update) */
+            if(book.getImageUrl().matches("(?i:^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$)")) {
+                String[] urlComponents = book.getImageUrl().split("/");
+                String bookImageId = urlComponents[urlComponents.length - 1];
+
+                BookImage bookImage = bookImageDao.findBookImageById(bookImageId);
+                bookImage.setData(file.getBytes());
+                bookImage.setType(file.getContentType());
+                bookImageDao.save(bookImage);
+
+            /* If the book previously has no image in database (create) */
+            } else {
+                BookImage bookImage = new BookImage(file.getContentType(), file.getBytes());
+                bookImageDao.save(bookImage);
+
+                String bookImageUrl = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/image/book/")
+                        .path(bookImage.getId())
+                        .toUriString();
+
+                newBook.setImageUrl(bookImageUrl);
+            }
         }
 
         return BookMapper.INSTANCE.bookToBookResource(

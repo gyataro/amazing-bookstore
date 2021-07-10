@@ -159,7 +159,7 @@ const BookSearch = (props) => {
     }
 
     const searchByTitle = () => {
-        bookService.searchByTitle(searchTitle).then(books => {
+        bookService.searchByTitle(searchTitle, 0, 100).then(books => {
             props.setBooks(books);
         })
     }
