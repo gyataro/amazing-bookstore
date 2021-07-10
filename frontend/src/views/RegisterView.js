@@ -20,7 +20,8 @@ import {
 } from "react-hook-form";
 import logo from '../assets/logo-dark.svg';
 import authCoverCSS from '../css/authcover.module.css';
-import {authenticationService} from "../services/authService";
+import { authenticationService } from "../services/authService";
+import { history } from "../utils/history";
 
 export default function RegisterView() {
     return (
@@ -73,14 +74,17 @@ function RegisterForm(props) {
                 values.password,
                 values.confirmPassword,
                 values.email
-            ).catch(e => {
+            ).then(user => {
+                history.push("/");
+                window.location.reload(true);
+            }, e => {
                 e.errors.forEach((error, index) => {
                     setError(error.field, {
                         type: "server",
                         message: error.message
                     })
                 });
-            })
+            });
             resolve();
         });
     }
